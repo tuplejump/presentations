@@ -1,8 +1,7 @@
-# Fast and Simplified Streaming
-# Ad-Hoc and Batch Analytics 
-# with FiloDB and Spark Streaming
+# Fast and Simplified Streaming, Ad-Hoc and 
+# Batch Analytics with FiloDB and Spark Streaming
 
-### Evan Chan and Helena Edelson
+### [Evan Chan](https://twitter.com/Evanfchan) and [Helena Edelson](https://twitter.com/helenaedelson)
 ### March 2016
 
 ---
@@ -56,6 +55,18 @@
 <center>
 ![](dilbert_jan13.jpg)
 </center>
+
+---
+
+## Topics
+
+* Modern streaming architectures and batch/ad-hoc architectures
+* Integrating streaming and historical data analysis
+* How a unified streaming + batch stack can lower your TCO
+* What FiloDB is and how it enables fast analytics with competitive storage cost
+* Use cases involving IoT, time series, machine, event data
+* Use case involving geospatial and smart cities data
+* Simplifying streaming and batch with Scala, Spark, Akka, Cassandra, Kafka and FiloDB
 
 ---
 
