@@ -1,3 +1,7 @@
 reveal
 node_modules/
 .DS_Store
+
+#intellij
+*.iml
+.idea/
