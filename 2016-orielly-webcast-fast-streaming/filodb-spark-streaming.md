@@ -6,7 +6,7 @@
 
 ---
 
-## Who am I?
+## About Evan Chan
 
 <center>
 ![](home.jpg)
@@ -20,17 +20,15 @@
 
 ---
 
-## Who am I?
-
-<center>
-![](home.jpg)
-</center>
+## About Helena Edelson
 
 - VP of Product Engineering, [Tuplejump](http://www.tuplejump.com)
-- @helenaedelson
-- [`http://github.com/helena`](http://github.com/helena) | [`http://helenaedelson.com`](http://helenaedelson.com)
-- User and contributor to Spark Cassandra since 0.9, Cassandra since 0.6
-- Co-creator and maintainer of [Spark Job Server](http://github.com/spark-jobserver/spark-jobserver)
+- Committer to Cassandra Kafka Connector, Spark Cassandra Connector
+- Contributor to Akka (2 new features in Akka Cluster)
+- Speaker @ Spark Summit, Strata, Strata, QCon, Scala Days, Scala World, Philly ETE 
+- [Tweets @helenaedelson](https://twitter.com/helenaedelson)
+- [Github `http://github.com/helena`](http://github.com/helena)
+- [My Neglected Blog `http://helenaedelson.com`](http://helenaedelson.com)
 
 ---
 
