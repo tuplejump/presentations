@@ -600,7 +600,7 @@ ColumnStore API - currently Cassandra and InMemory, you can implement other back
 * Projections.  Often-repeated queries can be sped up significantly with projections.
 * Use of GPU and SIMD instructions to speed up queries
 
---
+---
 
 ## You can help!
 
