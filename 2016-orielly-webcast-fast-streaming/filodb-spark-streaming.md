@@ -6,33 +6,32 @@
 
 ---
 
-## About Evan Chan
+## Evan Chan
 
 <center>
 ![](home.jpg)
 </center>
 
 - Distinguished Engineer, [Tuplejump](http://www.tuplejump.com)
-- @evanfchan
+- @evanfchan [@evanfchan](https://twitter.com/Evanfchan)
 - [`http://velvia.github.io`](http://velvia.github.io)
 - User and contributor to Spark since 0.9, Cassandra since 0.6
 - Co-creator and maintainer of [Spark Job Server](http://github.com/spark-jobserver/spark-jobserver)
 
 ---
 
-## About Helena Edelson
+## Helena Edelson
 
 - VP of Product Engineering, [Tuplejump](http://www.tuplejump.com)
-- Committer to Cassandra Kafka Connector, Spark Cassandra Connector
+- Committer: Kafka Connect Cassandra, Spark Cassandra Connector
 - Contributor to Akka (2 new features in Akka Cluster)
-- Speaker @ Spark Summit, Strata, Strata, QCon, Scala Days, Scala World, Philly ETE 
-- [Tweets @helenaedelson](https://twitter.com/helenaedelson)
-- [Github `http://github.com/helena`](http://github.com/helena)
-- [My Neglected Blog `http://helenaedelson.com`](http://helenaedelson.com)
+- Speaker @ Spark Summit, Kafka Summit, Strata, QCon, Scala Days, Scala World, Philly ETE 
+- [@helenaedelson](https://twitter.com/helenaedelson)
+- [`http://github.com/helena`](http://github.com/helena)
 
 ---
 
-## About Tuplejump
+## Tuplejump
 
 [Tuplejump](http://tuplejump.com) is a big data technology leader providing solutions and development partnership.
 
@@ -44,9 +43,16 @@
 
 ---
 
-## Tuplejump as your Development Partner
+**Tuplejump Blender** builds unified datasets for fast querying, from streaming and batch sources, 
+with automated machine learning + analytics
 
-![](tj2.png)
+![](tj-blender.png) 
+
+---
+
+## Tuplejump Consulting & Development
+
+![](tj-consulting.png)
 
 ---
 
@@ -619,13 +625,12 @@ Coming in Spark 1.4 through 1.6
 
 ---
 
-## Thanks...
+## Thanks For Attending!
 
 <center>
 to the entire OSS community, but in particular:
 </center>
-
-- Lee Mighdoll, Nest/Google
+ 
 - Rohit Rai and Satya B., Tuplejump
 - My colleagues at Socrata
 
