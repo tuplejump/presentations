@@ -399,7 +399,39 @@ Efficient columnar storage + filtering = low latency BI
 
 --
 
+## Modeling Fact Tables for FiloDB
+
+- Single partition queries are really fast and take up only one thread
+  + `entity_number = '0453' AND year_month = '2014 December'`
+- Multi partition queries still MUCH faster than full table scans
+  + FiloDB first scans a smaller table, so it can take arbitrary partition filters
+  + Partial filters like `entity_number IN (a, b, c)` perfectly acceptable
+
+--
+
+## Multi-Table JOINs with just Cassandra
+
+<center>
+![](Four-C-Table-Spark-Join.png)
+</center>
+
+--
+
 ## Sub-second Multi-Table JOINs with FiloDB
+
+<center>
+![](Four-Table-Spark-Join.png)
+</center>
+
+--
+
+## Sub-second Multi-Table JOINs with FiloDB
+
+- Four tables, all of them single-partition queries
+- Two tables were switched from regular Cassandra tables to FiloDB tables.  40-60 columns each, ~60k items in partition.
+- Scan times for those tables went down from 5-6 seconds to < 250ms
+
+For more details, please see blog post: XXXX
 
 ---
 
