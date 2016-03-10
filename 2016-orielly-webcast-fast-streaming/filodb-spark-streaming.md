@@ -1,5 +1,6 @@
-## Fast and Simplified Streaming, Ad-Hoc and 
-## Batch Analytics with FiloDB and Spark Streaming
+## Fast and Simplified Streaming,
+## Ad-Hoc and Batch Analytics with 
+## FiloDB and Spark Streaming
 
 ### [Evan Chan](https://twitter.com/Evanfchan) and [Helena Edelson](https://twitter.com/helenaedelson)
 ### March 2016
@@ -610,7 +611,7 @@ ColumnStore API - currently Cassandra and InMemory, you can implement other back
 - Email if you want to contribute
 
 ---
- 
+
 ## Thanks For Attending!
  
 - [@helenaedelson](https://twitter.com/helenaedelson)
