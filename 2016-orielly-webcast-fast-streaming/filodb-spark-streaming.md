@@ -610,7 +610,7 @@ ColumnStore API - currently Cassandra and InMemory, you can implement other back
 - Email if you want to contribute
 
 ---
- 
+
 ## Thanks For Attending!
  
 - [@helenaedelson](https://twitter.com/helenaedelson)
