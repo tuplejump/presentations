@@ -43,8 +43,8 @@
 
 ---
 
-**Tuplejump Blender** builds unified datasets for fast querying, from streaming and batch sources, 
-with automated machine learning + analytics
+**Tuplejump Blender** 
+<small>Builds unified datasets for fast querying, streaming and batch sources, ML and Analytics</small>
 
 ![](tj-blender.png) 
 
