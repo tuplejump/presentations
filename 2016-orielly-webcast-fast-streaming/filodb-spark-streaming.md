@@ -1,5 +1,6 @@
-## Fast and Simplified Streaming, Ad-Hoc and 
-## Batch Analytics with FiloDB and Spark Streaming
+## Fast and Simplified Streaming,
+## Ad-Hoc and Batch Analytics with 
+## FiloDB and Spark Streaming
 
 ### [Evan Chan](https://twitter.com/Evanfchan) and [Helena Edelson](https://twitter.com/helenaedelson)
 ### March 2016
