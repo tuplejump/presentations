@@ -267,7 +267,8 @@ People really want a database-like abstraction, not a file format!
 ## Introducing <span class="golden">FiloDB</span>
 
 <center>
-A distributed, versioned, columnar analytics database. Built for Streaming.
+A distributed, versioned, columnar analytics database.<br>
+*Built for Streaming.*
 </center>
 
 <p>&nbsp;<p>
@@ -380,6 +381,21 @@ Rich sweet layers of distributed, versioned database goodness
   - Data source for MLLib / building models
   - Data storage for classified / predicted / scored data
 
+--
+
+![](FiloDB_Cass_Together.001.jpg)
+
+--
+
+![](FiloDB_Cass_Together.002.jpg)
+
+--
+
+## Being Productionized as we speak...
+
+- One enterprise with many TB of financial and reporting data is moving their data warehouse to FiloDB + Cassandra + Spark
+- Another startup uses FiloDB as event storage, feeds the events into Spark MLlib, scores incoming data, then stores the results back in FiloDB for low-latency use cases
+
 ---
 
 ## Data Warehousing with <span class="golden">FiloDB</span>
@@ -396,23 +412,49 @@ Rich sweet layers of distributed, versioned database goodness
 
 --
 
-## Data Warehousing / BI with
-## FiloDB + C + Spark
+## Real-world DW Architecture Stack
 
 ![](data-warehouse.mermaid.png)
 <!-- .element: class="mermaid" -->
 
+<center>
 Efficient columnar storage + filtering = low latency BI
+</center>
 
 --
 
 ## Modeling Fact Tables for FiloDB
 
 - Single partition queries are really fast and take up only one thread
-  + `entity_number = '0453' AND year_month = '2014 December'`
-- Multi partition queries still MUCH faster than full table scans
-  + FiloDB first scans a smaller table, so it can take arbitrary partition filters
-  + Partial filters like `entity_number IN (a, b, c)` perfectly acceptable
+  + Given the following two partition key columns: entity_number, year_month
+  + `WHERE entity_number = '0453' AND year_month = '2014 December'`
+    * Exact match for partition key is pushed down as one partition
+- Consider the partition key carefully
+
+--
+
+## Cassandra often requires multiple tables
+
+What about the queries that do not translate to one partition?  Cassandra has many restrictions on partition key filtering (as of 2.x).
+
+- Table 1:  partition key = `(entity_number, year_month)`
+  + Can push down: `WHERE entity_number = NN AND year_month IN ('2014 Jan', '2014 Feb')` as well as equals
+- Table 2:  partition key = `(year_month, entity_number)`
+  + Can push down: `WHERE year_month = YYMM AND entity_number IN (123, 456)` as well as equals
+
+IN clause must be the last column to be pushed down. Two tables are needed just for efficient IN queries on either entity_number or year_month.
+
+--
+
+## FiloDB Flexible Partition Filters = WIN
+
+With ONE table, FiloDB offers FAST, arbitrary partition key filtering.  All of the below are pushed down:
+
+- `WHERE year_month IN ('2014 Jan', '2014 Feb')` (all entities)
+- `WHERE entity_number = 146`  (all year months)
+- Any combo of =, IN
+
+Space savings: 27 `*` 2 = **54x**
 
 --
 
@@ -436,7 +478,7 @@ Efficient columnar storage + filtering = low latency BI
 
 - Four tables, all of them single-partition queries
 - Two tables were switched from regular Cassandra tables to FiloDB tables.  40-60 columns each, ~60k items in partition.
-- Scan times for those tables went down from 5-6 seconds to < 250ms
+- Scan times went down from 5-6 seconds to < 250ms
 
 For more details, please see blog post: XXXX
 
@@ -534,6 +576,39 @@ For more details, see [this blog post](http://velvia.github.io/Spark-Concurrent-
 
 ---
 
+## FiloDB - Roadmap
+
+Your input is appreciated!
+
+* Productionization and automated stress testing
+* Kafka input API / connector (without needing Spark)
+* In-memory caching for significant query speedup
+* True columnar querying and execution, using late materialization and vectorization techniques.  GPU/SIMD.
+* Projections.  Often-repeated queries can be sped up significantly with projections.
+
+---
+
+## You can help!
+
+- Send me your use cases for fast big data analysis on Spark and Cassandra
+    + Especially IoT, Event, Time-Series
+    + What is your data model?
+- Email if you want to contribute
+
+---
+
+## Thanks For Attending!
+ 
+- [@helenaedelson](https://twitter.com/helenaedelson)
+- [@evanfchan](https://twitter.com/Evanfchan)
+- [@tuplejump](https://twitter.com/tuplejump) 
+
+---
+
+# EXTRA SLIDES
+
+---
+
 ## <span class="golden">FiloDB</span> - How?
 
 --
@@ -590,31 +665,4 @@ CREATE TABLE filodb.gdelt_chunks (
 </center>
 
 ColumnStore API - currently Cassandra and InMemory, you can implement other backends - ElasticSearch?  etc.
-
----
-
-## FiloDB - Roadmap
-
-* Support for many more data types and sort and partition keys - please give us your input!
-* Non-Spark ingestion API.  Your input is again needed.
-* In-memory caching for significant query speedup
-* Projections.  Often-repeated queries can be sped up significantly with projections.
-* Use of GPU and SIMD instructions to speed up queries
-
----
-
-## You can help!
-
-- Send me your use cases for fast big data analysis on Spark and Cassandra
-    + Especially IoT, Event, Time-Series
-    + What is your data model?
-- Email if you want to contribute
-
----
-
-## Thanks For Attending!
- 
-- [@helenaedelson](https://twitter.com/helenaedelson)
-- [@evanfchan](https://twitter.com/Evanfchan)
-- [@tuplejump](https://twitter.com/tuplejump) 
 
