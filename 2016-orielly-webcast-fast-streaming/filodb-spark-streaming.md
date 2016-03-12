@@ -497,26 +497,6 @@ For more details, please see blog post: XXXX
 
 --
 
-## Modeling Time Series with FiloDB
-
-| Entity  | Time1 | Time2 |
-| ------- | ----- | ----- |
-| US-0123 | d1    | d2    |
-| NZ-9495 | d1    | d2    |
-
-&nbsp;<p>
-Model your time series with FiloDB similarly to Cassandra:
-
-- **Segment key**: `:timeslice timestamp 4h`
-- **Partition Keys**:
-  - Event/machine UUID (smaller # of events)
-  - Event/machine UUID hash + time period
-* **Row Keys**: Timestamp, machine UUID
-
-FiloDB keeps data sorted while stored in efficient columnar storage.
-
---
-
 ## Spark Streaming -> FiloDB
 
 ```scala
@@ -537,6 +517,42 @@ FiloDB keeps data sorted while stored in efficient columnar storage.
     }
 ```
 One-line change to write to FiloDB vs Cassandra
+
+--
+
+## Modeling Time Series with FiloDB
+
+| Entity  | Time1 | Time2 |
+| ------- | ----- | ----- |
+| US-0123 | d1    | d2    |
+| NZ-9495 | d1    | d2    |
+
+&nbsp;<p>
+Model your time series with FiloDB similarly to Cassandra:
+
+- **Segment key**: `:timeslice timestamp 4h`
+- **Partition Keys**:
+  - Event/machine UUID (smaller # of events)
+  - Event/machine UUID hash + time period
+* **Row Keys**: Timestamp, machine UUID
+
+FiloDB keeps data sorted while stored in efficient columnar storage.
+
+--
+
+## Modeling the NYC Taxi Dataset
+
+The public [NYC Taxi Dataset](http://www.andresmh.com/nyctaxitrips/) contains telemetry (pickup, dropoff locations, times) info on millions of taxi rides in NYC.
+
+| Medallion prefix  | 1/1 - 1/6   |  1/7 - 1/12  |
+| ----------------- | ----------- | ------------ |
+| AA             | records     |  records     |
+| AB             | records     |  records     |
+
+* Partition key - `:stringPrefix medallion 2` - hash multiple drivers trips into ~300 partitions
+* Segment key - `:timeslice pickup_datetime 6d`
+
+Allows for easy filtering by individual drivers, and slicing by time.
 
 --
 
