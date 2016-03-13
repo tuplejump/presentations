@@ -44,16 +44,21 @@
 
 ---
 
+<center>
 **Tuplejump Blender** 
 <small>Builds unified datasets for fast querying, streaming and batch sources, ML and Analytics</small>
-
+</center>
+<center>
 ![](tj-blender.png) 
+</center>
 
 ---
 
 ## Tuplejump Consulting & Development
 
+<center>
 ![](tj-consulting.png)
+</center>
 
 ---
 
@@ -295,7 +300,9 @@ NOTE: 200x is just based on columnar storage + projection pushdown - no filterin
 ![](storage_cost_vs_query.png)
 </center>
 
+<center>
 [https://www.oreilly.com/ideas/apache-cassandra-for-analytics-a-performance-and-storage-analysis](https://www.oreilly.com/ideas/apache-cassandra-for-analytics-a-performance-and-storage-analysis)
+</center>
 
 --
 
@@ -332,14 +339,16 @@ Proven storage and database technology.
 &nbsp;<p>
 
 - **partition keys** - distributes data around a cluster, and allows for fine grained and flexible filtering
-- **segment keys** - do range scans within a partition, eg by time slice
+- **segment keys** - do range scans within a partition, e.g. by time slice
 - primary key based ingestion and updates
 
 --
 
 ## Flexible Filtering
 
-Unlike Cassandra, FiloDB offers very flexible and efficient filtering on partition keys.  Partial key matches, fast IN queries on any part of the partition key.  There is no need to write multiple tables to work around answering different queries.
+Unlike Cassandra, FiloDB offers very flexible and efficient filtering on partition keys.  Partial key matches, fast IN queries on any part of the partition key.  
+<br/>
+*No need to write multiple tables to work around answering different queries.*
 
 --
 
@@ -478,9 +487,8 @@ FiloDB keeps data sorted while stored in efficient columnar storage.
 ## Spark Streaming -> FiloDB
 
 ```scala
-    val ratingsStream = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
-    ratingsStream.foreachRDD {
-      (message: RDD[(String, String)], batchTime: Time) => {
+    KafkaUtils.createDirectStream[A, B, ADecoder, BDecoder](ssc, kafkaParams, topics)
+      .foreachRDD { (message: RDD[(A, B)], batchTime: Time) => {
         val df = message.map(_._2.split(",")).map(rating => Rating(rating(0).trim.toInt, rating(1).trim.toInt, rating(2).trim.toInt)).
           toDF("fromuserid", "touserid", "rating")
       
