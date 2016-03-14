@@ -124,6 +124,8 @@ budget</center>
 
 ---
 
+## Use Case
+
 <center>I need fast access to historical data on the fly for predictive modeling 
         with real time data from the stream 
 </center>
@@ -172,40 +174,6 @@ of data by taking advantage of both batch and stream processing methods.*
 
 ---
 
-## Lambda: Multiple Systems
- 
-- Can be a very complex pipeline
-- Many moving parts - KV store, real time, Batch technologies plus ETL...
-- Running similar code in two places
-- Reconcile queries against two different places
-- Complicated logic changes across multiple systems (code)
-
----
-
-## Challenges with Multiple Systems
- 
-- Overly-complicated Ops
-- Complicated fault tolerance across all systems (immutability)
-- Performance tuning & monitoring on multiple systems
-- High TCO
-
----
-
-## Which Translates To
-
-<center>
-![](images/architectyr.jpg)
-</center>
-
----
-
-## Why Separate Streaming & Batch Flows
-
-- Evolution Or Just Addition?
-- Or Just Technical Debt?
-
----
-
 ## Challenge Assumptions
 
 <center>
@@ -217,31 +185,39 @@ in parallel"*
 
 ---
 
+## Lambda Architecture
+
+**Dual Analytics Systems**
+
+- Many moving parts: KV store, real time, Batch technologies
+- Running similar code and reconciling queries in dual systems
+
+
+**Overly Complicated**
+
+- Pipelines
+- Ops: e.g. performance tuning & monitoring, upgrades...
+- Analytics logic changes: dev/testing/deploys of changes to code bases,  clusters
+
+---
+
+## Ultimately High TCO
+
+### And...
+
+---
+
+## Technical Debt
+
+<center>
+![](images/architectyr.jpg)
+</center>
+
+---
+
 ## Are Batch and Streaming Systems Fundamentally Different?
 
 <center>No.</center>
-
----
-
-## Do We Really Need 
-
-- A Batch Analytics System
-- An ETL System
-- A Streaming Analytics System
-
-<br/>
-<center>*Not any more.*</center>
-
----
-
-## Why Dual Analytics Systems
-
-Supporting code, machines, staff, monitoring and running services for multiple clustered analytics systems?
-
-- Performing analytical computations & queries in dual systems
-- Spaghetti Architecture for Data Flows
-- Duplicated Code
-- One Busy Network
 
 ---
 
@@ -272,7 +248,7 @@ Everything On The Streaming Platform</center>
 - Easy to reconcile queries against multiple sources
 - Easy integration of KV durable storage
 
---
+---
 
 ## <span class="cassred">Cassandra</span>
 
@@ -288,7 +264,7 @@ Everything On The Streaming Platform</center>
 - Easy to operate
 - Best of breed storage technology, huge community
 - **BUT: Simple queries only**
-- **OLTP-oriented**
+- **OLTP-oriented**/center
 
 ---
 
@@ -303,6 +279,18 @@ Everything On The Streaming Platform</center>
 - Location Transparency
 - Local / Remote Routing 
 - Akka: Cluster / Persistence / Streams
+
+---
+
+## Enables
+### Streaming and Batch In One System
+
+<center>Streaming ML and Analytics for Predictions In The Stream</center>
+
+<center>
+![](images/reactive-vs-predictive.jpg)
+</center>
+<center>Show me the code</center>
 
 ---
 
