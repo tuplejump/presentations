@@ -582,7 +582,11 @@ With ONE table, FiloDB offers FAST, arbitrary partition key filtering.  All of t
 - `WHERE entity_number = 146`  (all year months)
 - Any combo of =, IN
 
+<p>
+<center><large>
 Space savings: 27 `*` 2 = **54x**
+</large>
+</center>
 
 --
 
@@ -719,6 +723,29 @@ For more details, see [this blog post](http://velvia.github.io/Spark-Concurrent-
 ---
 
 ## Machine Learning with Spark, Cassandra, and FiloDB
+
+--
+
+## Building a static model of NYC Taxi Trips
+
+- Predict time to get to destination based on pickup point, time of day, other vars
+- Need to read all data (full table scan)
+
+-- 
+
+## Dynamic models are better than static models
+
+- Everything changes!
+- Continuously refine model based on recent streaming data + historical data + existing model
+
+-- 
+
+## The FiloDB Advantage for ML
+
+- Able to update dynamic models based on massive data flow/updates
+- More data -> better models!
+- Can store scored raw data / predictions back in FiloDB
+  + for fast user queries
 
 ---
 
