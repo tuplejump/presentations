@@ -244,7 +244,6 @@ Everything On The Streaming Platform</center>
 - Join streaming and static data sets 
 - No code duplication
 - Easy Kafka stream integration
-- Easy, flexible data ingestion from disparate sources to disparate sinks
 - Easy to reconcile queries against multiple sources
 - Easy integration of KV durable storage
 
@@ -314,8 +313,8 @@ Everything On The Streaming Platform</center>
 class KafkaStreamingActor(ssc: StreamingContext, settings: Settings) extends AggregationActor {   
   val stream = KafkaUtils.createDirectStream(...) .map(RawWeatherData(_))
   stream
-    .foreachRDD(_.toDF.write.format("filodb.spark")
-    .option(rawDataKeyspace, rawDataTable))
+    .foreachRDD(_.toDF.write.format("filodb.spark"))
+    .option(rawDataKeyspace, rawDataTable)
  
   /* Pre-Aggregate data in the stream for fast querying and aggregation later. */
  
