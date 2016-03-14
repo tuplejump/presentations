@@ -1,6 +1,6 @@
 ## Fast and Simplified Streaming,
 ## Ad-Hoc and Batch Analytics with 
-## FiloDB and Spark Streaming
+## <span class="golden">FiloDB</span> and Spark Streaming
 
 ### [Evan Chan](https://twitter.com/Evanfchan) and [Helena Edelson](https://twitter.com/helenaedelson)
 ### March 2016
@@ -385,31 +385,6 @@ model
 
 ![](one-pipeline.mermaid.png)
 <!-- .element: class="mermaid" -->
-
---
-
-## Ad-Hoc and ML with Spark
-
-DataFrames support in Spark Cassandra Connector:
-
-<p>
-```scala
-val sqlContext = new org.apache.spark.sql.SQLContext(sc)
-
-val df = sqlContext.read
-                   .format("org.apache.spark.sql.cassandra")
-                   .option("table", "gdelt")
-                   .option("keyspace", "test").load()
-df.registerTempTable("gdelt")
-sqlContext.cacheTable("gdelt")
-sqlContext.sql("SELECT count(monthyear) FROM gdelt").show()
-```
-
---
-
-## Spark provides the missing fast, deep analytics piece of <span class="cassred">Cassandra</span>!
-
-### ...tying together fast event ingestion and rich deep analytics!
 
 ---
 
