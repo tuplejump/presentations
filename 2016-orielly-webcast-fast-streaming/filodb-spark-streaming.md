@@ -25,7 +25,7 @@
 
 - VP of Product Engineering, [Tuplejump](http://www.tuplejump.com)
 - Committer: Kafka Connect Cassandra, Spark Cassandra Connector
-- Contributor to Akka (2 new features in Akka Cluster)
+- Contributor to Akka (2 new features in Akka Cluster), Spring Integration
 - Speaker @ Spark Summit, Kafka Summit, Strata, QCon, Scala Days, Scala World, Philly ETE 
 - [@helenaedelson](https://twitter.com/helenaedelson)
 - [`http://github.com/helena`](http://github.com/helena)
@@ -36,11 +36,15 @@
 
 [Tuplejump](http://tuplejump.com) is a big data technology leader providing solutions and development partnership.
 
-* [FiloDB](http://github.com/tuplejump/FiloDB) - subject of today's talk
-* [Cassandra Kafka Connector](http://github.com/tuplejump/kafka-connector) - todo
-* [Calliope](http://tuplejump.github.io/calliope/) - the first Spark-Cassandra integration
-* [Stargate](http://tuplejump.github.io/stargate/) - an open source Lucene indexer for Cassandra
-* [SnackFS](https://github.com/tuplejump/snackfs) - open source HDFS for Cassandra
+---
+
+## ![](images/tuplejump_circle-sm.png) [Tuplejump](http://tuplejump.com) Open Source: on GitHub
+
+* [FiloDB](http://github.com/tuplejump/FiloDB) - Subject of today's talk
+* [Kafka Connect Cassandra](http://github.com/tuplejump/kafka-connector) - Kafka-Cassandra Source and Sink
+* [Calliope](http://tuplejump.github.io/calliope/) - The first Spark Cassandra integration
+* [Stargate](http://tuplejump.github.io/stargate/) - Lucene indexer for Cassandra
+* [SnackFS](https://github.com/tuplejump/snackfs) - HDFS for Cassandra
 
 ---
 
@@ -49,7 +53,7 @@
 <small>Builds unified datasets for fast querying, streaming and batch sources, ML and Analytics</small>
 </center>
 <center>
-![](tj-blender.png) 
+![](images/tj-blender.png) 
 </center>
 
 ---
@@ -57,13 +61,7 @@
 ## Tuplejump Consulting & Development
 
 <center>
-![](tj-consulting.png)
-</center>
-
----
-
-<center>
-![](dilbert_jan13.jpg)
+![](images/tj-consulting.png)
 </center>
 
 ---
@@ -78,6 +76,157 @@
 * Time series / event data / geospatial examples
 * Machine learning using Spark MLLib + Cassandra/FiloDB
 * Integrating streaming and historical data analysis
+
+---
+
+## The Problem Domain
+Build scalable, adaptable, self-healing, distributed data processing systems for
+ 
+- Massive amounts of data 
+- Disparate sources and schemas
+- Differing data structures
+- Complex analytics and learning tasks
+- To run as large-scale clustered dataflows
+- 24-7 Uptime
+- Globally clustered deployments
+- No data loss
+
+---
+
+## Delivering Meaning
+
+- Deliver meaning in sec/sub-sec latency
+- Billions of events per second
+- Low latency real time stream processing
+- Higher latency batch processing
+- Aggregation of global data from the stream
+
+---
+
+## While We Monitor, Predict & Proactively Handle
+
+- Massive event spikes & bursty traffic
+- Fast producers / slow consumers
+- Network partitioning & out of sync systems 
+- DC down 
+- Not DDOS'ing ourselves from fast streams
+- No data loss when auto-scaling down
+
+---
+
+## And stay within our 
+<center>
+AWS<br/>
+OpenStack<br/>
+Rackspace...<br/> 
+
+budget</center>
+
+---
+
+<center>I need fast access to historical data on the fly for predictive modeling 
+        with real time data from the stream 
+</center>
+<center>
+![](images/predictive.jpeg)
+</center>
+
+---
+
+## Only, It's Not A Stream It's A Flood
+
+- 100 billion events per day
+- 1-2 million events per second at peak
+- 500 billion write events per day
+- 2.5 trillion read events per day
+- 4.5 million events per second at peak with Kafka
+- Petabytes of streaming data
+
+---
+
+## Lambda Architecture
+
+*A data-processing architecture designed to handle massive quantities 
+of data by taking advantage of both batch and stream processing methods.*
+
+This works, but...
+
+- Can be a very complex pipeline
+- Many moving parts - KV store, real time, Batch technologies plus ETL...
+- Reconcile queries against two different places
+- Performance tuning & monitoring on multiple systems
+
+---
+
+## λ Architecture
+
+- Results in overly-complicated Ops
+- Not to mention $$$
+
+---
+
+## λ: Separate Streaming & Batch Flows
+
+- Evolution Or Just Addition?
+- Or Just Technical Debt?
+
+---
+
+## Challenge Assumptions
+
+Let's do a double-take:
+
+Lambda Architecture: "Ingest an immutable sequence of records is captured and fed into:"
+
+- "a batch processing system"
+- "and a stream processing system"
+- "in parallel"
+
+---
+
+## Which Translates To
+
+<center>
+![](images/architectyr.jpg)
+</center>
+
+---
+
+## Why Dual Analytics Systems
+
+Supporting code, machines, staff, monitoring and running services for multiple clustered analytics systems?
+
+- Performing analytical computations & queries in dual systems
+- Spaghetti Architecture for Data Flows
+- Duplicated Code
+- One Busy Network
+
+---
+
+## A Unified Streaming Architecture
+
+One unified system for streaming and batch with 
+
+- Spark Streaming
+- Scala
+- Mesos
+- Akka
+- Cassandra
+- Kafka
+
+---
+
+## What's Missing?
+
+Fast Streaming Queries!
+
+- **FiloDB**
+- Spark Streaming
+- Scala
+- Mesos
+- Akka
+- Cassandra
+- Kafka
 
 ---
 
@@ -272,7 +421,8 @@ People really want a database-like abstraction, not a file format!
 ## Introducing <span class="golden">FiloDB</span>
 
 <center>
-A distributed, versioned, columnar analytics database. Built for Streaming.
+A distributed, versioned, columnar analytics database.<br>
+*Built for Streaming.*
 </center>
 
 <p>&nbsp;<p>
@@ -389,6 +539,21 @@ Rich sweet layers of distributed, versioned database goodness
   - Data source for MLLib / building models
   - Data storage for classified / predicted / scored data
 
+--
+
+![](FiloDB_Cass_Together.001.jpg)
+
+--
+
+![](FiloDB_Cass_Together.002.jpg)
+
+--
+
+## Being Productionized as we speak...
+
+- One enterprise with many TB of financial and reporting data is moving their data warehouse to FiloDB + Cassandra + Spark
+- Another startup uses FiloDB as event storage, feeds the events into Spark MLlib, scores incoming data, then stores the results back in FiloDB for low-latency use cases
+
 ---
 
 ## Data Warehousing with <span class="golden">FiloDB</span>
@@ -405,23 +570,49 @@ Rich sweet layers of distributed, versioned database goodness
 
 --
 
-## Data Warehousing / BI with
-## FiloDB + C + Spark
+## Real-world DW Architecture Stack
 
 ![](data-warehouse.mermaid.png)
 <!-- .element: class="mermaid" -->
 
+<center>
 Efficient columnar storage + filtering = low latency BI
+</center>
 
 --
 
 ## Modeling Fact Tables for FiloDB
 
 - Single partition queries are really fast and take up only one thread
-  + `entity_number = '0453' AND year_month = '2014 December'`
-- Multi partition queries still MUCH faster than full table scans
-  + FiloDB first scans a smaller table, so it can take arbitrary partition filters
-  + Partial filters like `entity_number IN (a, b, c)` perfectly acceptable
+  + Given the following two partition key columns: entity_number, year_month
+  + `WHERE entity_number = '0453' AND year_month = '2014 December'`
+    * Exact match for partition key is pushed down as one partition
+- Consider the partition key carefully
+
+--
+
+## Cassandra often requires multiple tables
+
+What about the queries that do not translate to one partition?  Cassandra has many restrictions on partition key filtering (as of 2.x).
+
+- Table 1:  partition key = `(entity_number, year_month)`
+  + Can push down: `WHERE entity_number = NN AND year_month IN ('2014 Jan', '2014 Feb')` as well as equals
+- Table 2:  partition key = `(year_month, entity_number)`
+  + Can push down: `WHERE year_month = YYMM AND entity_number IN (123, 456)` as well as equals
+
+IN clause must be the last column to be pushed down. Two tables are needed just for efficient IN queries on either entity_number or year_month.
+
+--
+
+## FiloDB Flexible Partition Filters = WIN
+
+With ONE table, FiloDB offers FAST, arbitrary partition key filtering.  All of the below are pushed down:
+
+- `WHERE year_month IN ('2014 Jan', '2014 Feb')` (all entities)
+- `WHERE entity_number = 146`  (all year months)
+- Any combo of =, IN
+
+Space savings: 27 `*` 2 = **54x**
 
 --
 
@@ -445,7 +636,7 @@ Efficient columnar storage + filtering = low latency BI
 
 - Four tables, all of them single-partition queries
 - Two tables were switched from regular Cassandra tables to FiloDB tables.  40-60 columns each, ~60k items in partition.
-- Scan times for those tables went down from 5-6 seconds to < 250ms
+- Scan times went down from 5-6 seconds to < 250ms
 
 For more details, please see blog post: XXXX
 
@@ -461,6 +652,29 @@ For more details, please see blog post: XXXX
 - Writes are *idempotent* - easy **exactly once** ingestion
 - Converted to columnar chunks on ingest and stored in C*
 - FiloDB keeps your data sorted as it is being ingested
+
+--
+
+## Spark Streaming -> FiloDB
+
+```scala
+    val ratingsStream = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, kafkaParams, topics)
+    ratingsStream.foreachRDD {
+      (message: RDD[(String, String)], batchTime: Time) => {
+        val df = message.map(_._2.split(",")).map(rating => Rating(rating(0).trim.toInt, rating(1).trim.toInt, rating(2).trim.toInt)).
+          toDF("fromuserid", "touserid", "rating")
+      
+        // add the batch time to the DataFrame
+        val dfWithBatchTime = df.withColumn("batch_time", org.apache.spark.sql.functions.lit(batchTime.milliseconds))
+      
+        // save the DataFrame to FiloDB
+        dfWithBatchTime.write.format("filodb.spark")
+          .option("dataset", "ratings")
+          .save()
+      }
+    }
+```
+One-line change to write to FiloDB vs Cassandra
 
 --
 
@@ -484,31 +698,31 @@ FiloDB keeps data sorted while stored in efficient columnar storage.
 
 --
 
-## Spark Streaming -> FiloDB
+## Modeling the NYC Taxi Dataset
 
-```scala
-    KafkaUtils.createDirectStream[A, B, ADecoder, BDecoder](ssc, kafkaParams, topics)
-      .foreachRDD { (message: RDD[(A, B)], batchTime: Time) => {
-        val df = message.map(_._2.split(",")).map(rating => Rating(rating(0).trim.toInt, rating(1).trim.toInt, rating(2).trim.toInt)).
-          toDF("fromuserid", "touserid", "rating")
-      
-        // add the batch time to the DataFrame
-        val dfWithBatchTime = df.withColumn("batch_time", org.apache.spark.sql.functions.lit(batchTime.milliseconds))
-      
-        // save the DataFrame to FiloDB
-        dfWithBatchTime.write.format("filodb.spark")
-          .option("dataset", "ratings")
-          .save()
-      }
-    }
-```
-One-line change to write to FiloDB vs Cassandra
+The public [NYC Taxi Dataset](http://www.andresmh.com/nyctaxitrips/) contains telemetry (pickup, dropoff locations, times) info on millions of taxi rides in NYC.
+
+| Medallion prefix  | 1/1 - 1/6   |  1/7 - 1/12  |
+| ----------------- | ----------- | ------------ |
+| AA             | records     |  records     |
+| AB             | records     |  records     |
+
+* Partition key - `:stringPrefix medallion 2` - hash multiple drivers trips into ~300 partitions
+* Segment key - `:timeslice pickup_datetime 6d`
+
+Allows for easy filtering by individual drivers, and slicing by time.
 
 --
 
 # DEMO TIME
 
 ### New York City Taxi Data Demo (Spark Notebook)
+
+To follow along:  https://github.com/tuplejump/FiloDB/blob/master/doc/FiloDB_Taxi_Geo_demo.snb
+
+--
+
+<iframe src="http://localhost:9000/notebooks/viz/FiloDB%20Taxi%20Geo%20Demo.snb" height="800" width="1200" />
 
 ---
 
@@ -539,6 +753,39 @@ For more details, see [this blog post](http://velvia.github.io/Spark-Concurrent-
 ---
 
 ## Integrating Historical and Streaming Workloads
+
+---
+
+## FiloDB - Roadmap
+
+Your input is appreciated!
+
+* Productionization and automated stress testing
+* Kafka input API / connector (without needing Spark)
+* In-memory caching for significant query speedup
+* True columnar querying and execution, using late materialization and vectorization techniques.  GPU/SIMD.
+* Projections.  Often-repeated queries can be sped up significantly with projections.
+
+---
+
+## You can help!
+
+- Send me your use cases for fast big data analysis on Spark and Cassandra
+    + Especially IoT, Event, Time-Series
+    + What is your data model?
+- Email if you want to contribute
+
+---
+
+## Thanks For Attending!
+ 
+- [@helenaedelson](https://twitter.com/helenaedelson)
+- [@evanfchan](https://twitter.com/Evanfchan)
+- [@tuplejump](https://twitter.com/tuplejump) 
+
+---
+
+# EXTRA SLIDES
 
 ---
 
@@ -598,31 +845,4 @@ CREATE TABLE filodb.gdelt_chunks (
 </center>
 
 ColumnStore API - currently Cassandra and InMemory, you can implement other backends - ElasticSearch?  etc.
-
----
-
-## FiloDB - Roadmap
-
-* Support for many more data types and sort and partition keys - please give us your input!
-* Non-Spark ingestion API.  Your input is again needed.
-* In-memory caching for significant query speedup
-* Projections.  Often-repeated queries can be sped up significantly with projections.
-* Use of GPU and SIMD instructions to speed up queries
-
----
-
-## You can help!
-
-- Send me your use cases for fast big data analysis on Spark and Cassandra
-    + Especially IoT, Event, Time-Series
-    + What is your data model?
-- Email if you want to contribute
-
----
-
-## Thanks For Attending!
- 
-- [@helenaedelson](https://twitter.com/helenaedelson)
-- [@evanfchan](https://twitter.com/Evanfchan)
-- [@tuplejump](https://twitter.com/tuplejump) 
 
