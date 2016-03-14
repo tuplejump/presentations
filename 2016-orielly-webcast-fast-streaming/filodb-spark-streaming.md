@@ -149,23 +149,27 @@ budget</center>
 *A data-processing architecture designed to handle massive quantities 
 of data by taking advantage of both batch and stream processing methods.*
 
-This works, but...
+---
 
+## Challenges with Multiple Systems
+ 
 - Can be a very complex pipeline
 - Many moving parts - KV store, real time, Batch technologies plus ETL...
 - Reconcile queries against two different places
+- Complicated logic changes across multiple systems (code)
+- Complicated fault tolerance across all systems (immutability)
+
+---
+
+## Challenges with Multiple Systems
+ 
+- Overly-complicated Ops
 - Performance tuning & monitoring on multiple systems
+- High TCO
 
 ---
 
-## λ Architecture
-
-- Results in overly-complicated Ops
-- Not to mention $$$
-
----
-
-## λ: Separate Streaming & Batch Flows
+## Why Separate Streaming & Batch Flows
 
 - Evolution Or Just Addition?
 - Or Just Technical Debt?
@@ -174,13 +178,12 @@ This works, but...
 
 ## Challenge Assumptions
 
-Let's do a double-take:
-
-Lambda Architecture: "Ingest an immutable sequence of records is captured and fed into:"
-
-- "a batch processing system"
-- "and a stream processing system"
-- "in parallel"
+<center>
+*"Ingest an immutable sequence of records is captured and fed into<br/> 
+a batch processing system<br/> 
+and a stream processing system<br/> 
+in parallel"*
+</center>
 
 ---
 
@@ -189,6 +192,18 @@ Lambda Architecture: "Ingest an immutable sequence of records is captured and fe
 <center>
 ![](images/architectyr.jpg)
 </center>
+
+---
+
+## Can We Not process N-Streams In Parallel Already?
+
+Yes.
+
+---
+
+## Do We Need Both A Batch And A Streaming Analytics System, And ETL System?
+
+Not any more.
 
 ---
 
@@ -207,8 +222,7 @@ Supporting code, machines, staff, monitoring and running services for multiple c
 
 One unified system for streaming and batch with 
 
-- Spark Streaming
-- Scala
+- Scala / Spark Streaming
 - Mesos
 - Akka
 - Cassandra
@@ -247,56 +261,6 @@ Fast Streaming Queries!
 - Reactive processing of data as it comes in to derive instant insights.
 - Is this enough?
 - Usually need to combine with existing big data, historical processing, ad hoc.
-
----
-
-## Let's Talk Architecture!
-
-<center>
-  ![Aqueduct](aqueduct.jpg)
-</center>
-
----
-
-## Lambda Architecture...
-
-<center>
-![Lamba Architecture](lambda-architecture-2-800.jpg)
-</center>
-
-(https://www.mapr.com/developercentral/lambda-architecture)
-
---
-
-## Lambda is Hard
-
-- Real-time pipeline backed by KV store for updates 
-- Many moving parts - KV store, real time, batch
-  + Lots of monitoring, operations, headache
-- Running similar code in two places
-- Still ingesting data to Parquet/HDFS 
-- Reconcile queries against two different places
-
---
-
-## NoLambda
-
-<center>YES to:</center>
-
-- A unified system 
-- Real-time processing and reprocessing
-- Code changes 
-- Fault tolerance
-
----
-
-## SMACK
-
-- Scala/Spark Streaming
-- Mesos
-- Akka
-- Cassandra
-- Kafka
 
 --
 
