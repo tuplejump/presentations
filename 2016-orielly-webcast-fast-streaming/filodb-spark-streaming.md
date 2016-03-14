@@ -349,25 +349,29 @@ Efficient Batch Analysis in Streaming Applications / Architectures
 
 ---
 
-## Spark Streaming, MLLib, and Kafka, Cassandra, Akka
+## Spark Streaming, MLLib
+## Kafka, Cassandra, Akka
 
 ```scala
 
-    val ssc = new StreamingContext(sparkConf, Seconds(5) 
-    val testData = ssc.cassandraTable[String](keyspace,table).map(LabeledPoint.parse)
-      val trainingStream = KafkaUtils.createDirectStream[..](..)
-        .map(transformFunc)
-        .map(LabeledPoint.parse)
+val ssc = new StreamingContext(sparkConf, Seconds(5) 
+val testData = ssc.cassandraTable[String](keyspace,table)
+  .map(LabeledPoint.parse)
+      
+val trainingStream = KafkaUtils.createDirectStream[..](..)
+    .map(transformFunc)
+    .map(LabeledPoint.parse)
     
-    trainingStream.saveToCassandra("ml_training_keyspace", "raw_training_data")  
+trainingStream
+  .saveToCassandra("ml_training_keyspace", "raw_training_data")  
     
-     val model = new StreamingLinearRegressionWithSGD()   
-      .setInitialWeights(Vectors.dense(weights))   
-      .trainOn(trainingStream)
+ val model = new StreamingLinearRegressionWithSGD()   
+  .setInitialWeights(Vectors.dense(weights))   
+  .trainOn(trainingStream)
      
-    model
-    .predictOnValues(testData.map(lp => (lp.label, lp.features)))
-    .saveToCassandra("ml_predictions_keyspace", "predictions")
+model
+  .predictOnValues(testData.map(lp => (lp.label, lp.features)))
+  .saveToCassandra("ml_predictions_keyspace", "predictions")
 
 ```
 
