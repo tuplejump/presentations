@@ -151,21 +151,41 @@ of data by taking advantage of both batch and stream processing methods.*
 
 ---
 
-## Challenges with Multiple Systems
+## Lambda Architecture
+
+<center>
+![Lamba Architecture](lambda-architecture-2-800.jpg)
+</center>
+
+(https://www.mapr.com/developercentral/lambda-architecture)
+
+---
+
+## Lambda: Multiple Systems
  
 - Can be a very complex pipeline
 - Many moving parts - KV store, real time, Batch technologies plus ETL...
+- Running similar code in two places
+- Still ingesting data to Parquet/HDFS 
 - Reconcile queries against two different places
 - Complicated logic changes across multiple systems (code)
-- Complicated fault tolerance across all systems (immutability)
 
 ---
 
 ## Challenges with Multiple Systems
  
 - Overly-complicated Ops
+- Complicated fault tolerance across all systems (immutability)
 - Performance tuning & monitoring on multiple systems
 - High TCO
+
+---
+
+## Which Translates To
+
+<center>
+![](images/architectyr.jpg)
+</center>
 
 ---
 
@@ -187,23 +207,20 @@ in parallel"*
 
 ---
 
-## Which Translates To
-
-<center>
-![](images/architectyr.jpg)
-</center>
-
----
-
 ## Can We Not process N-Streams In Parallel Already?
 
-Yes.
+<center>Yes.</center>
 
 ---
 
-## Do We Need Both A Batch And A Streaming Analytics System, And ETL System?
+## Do We Really Need 
 
-Not any more.
+- A Batch Analytics System
+- An ETL System
+- A Streaming Analytics System
+
+<br/>
+<center>*Not any more.*</center>
 
 ---
 
@@ -219,8 +236,10 @@ Supporting code, machines, staff, monitoring and running services for multiple c
 ---
 
 ## A Unified Streaming Architecture
-
-One unified system for streaming and batch with 
+<center>
+One unified system for streaming and batch: 
+</center>
+<br/>
 
 - Scala / Spark Streaming
 - Mesos
@@ -230,17 +249,11 @@ One unified system for streaming and batch with
 
 ---
 
-## What's Missing?
+## What's Missing? One Pipeline For Fast + Big Data
 
-Fast Streaming Queries!
+![](one-pipeline.mermaid.png)
+<!-- .element: class="mermaid" -->
 
-- **FiloDB**
-- Spark Streaming
-- Scala
-- Mesos
-- Akka
-- Cassandra
-- Kafka
 
 ---
 
@@ -327,13 +340,6 @@ sqlContext.sql("SELECT count(monthyear) FROM gdelt").show()
 &nbsp;
 <p>
 People really want a database-like abstraction, not a file format!
-
----
-
-## One Pipeline For Fast + Big Data
-
-![](one-pipeline.mermaid.png)
-<!-- .element: class="mermaid" -->
 
 --
 
