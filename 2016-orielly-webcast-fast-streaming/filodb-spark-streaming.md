@@ -731,14 +731,14 @@ For more details, see [this blog post](http://velvia.github.io/Spark-Concurrent-
 - Predict time to get to destination based on pickup point, time of day, other vars
 - Need to read all data (full table scan)
 
--- 
+--
 
 ## Dynamic models are better than static models
 
 - Everything changes!
 - Continuously refine model based on recent streaming data + historical data + existing model
 
--- 
+--
 
 ## The FiloDB Advantage for ML
 
