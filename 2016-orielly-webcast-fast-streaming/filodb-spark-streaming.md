@@ -762,10 +762,6 @@ Allows for easy filtering by individual drivers, and slicing by time.
 
 To follow along:  https://github.com/tuplejump/FiloDB/blob/master/doc/FiloDB_Taxi_Geo_demo.snb
 
---
-
-<iframe src="http://localhost:9000/notebooks/viz/FiloDB%20Taxi%20Geo%20Demo.snb" height="800" width="1200" />
-
 ---
 
 ## Fast, Updatable In-Memory
