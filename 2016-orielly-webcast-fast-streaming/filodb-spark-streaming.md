@@ -258,6 +258,52 @@ Everything On The Streaming Platform</center>
 
 ---
 
+## Spark Streaming
+
+<center>
+![](spark-streaming.png)
+</center>
+
+- One runtime for streaming and batch processing
+- Join streaming and static data sets 
+- No code duplication
+- Easy Kafka stream integration
+- Easy, flexible data ingestion from disparate sources to disparate sinks
+- Easy to reconcile queries against multiple sources
+- Easy integration of KV durable storage
+
+--
+
+## <span class="cassred">Cassandra</span>
+
+<center>
+![](cassandra.jpg)
+</center>
+
+- Horizontally scalable
+- Multi-Region / Multi-Datacenter
+- Always On - Survive regional outages
+- Extremely fast writes: - perfect for ingestion of real time / machine data
+- Very flexible data modelling (lists, sets, custom data types)
+- Easy to operate
+- Best of breed storage technology, huge community
+- **BUT: Simple queries only**
+- **OLTP-oriented**
+
+---
+
+## Akka
+
+High performance concurrency framework for Scala and Java 
+Fault Tolerance
+Asynchronous messaging and data processing 
+Parallelization
+Location Transparency
+Local / Remote Routing 
+Akka: Cluster / Persistence / Streams
+
+---
+
 ## First Snapshot The Raw Data
 For replay and reprocessing any time: for fault tolerance, logic changes..
 
@@ -277,6 +323,7 @@ in other secondary stream aggregation computations and scheduled batch computati
      ).saveToCassandra(CassandraKeyspace, CassandraTableDailyPrecip)  
 
 ```
+
 ---
 
 Efficient Batch Analysis in Streaming Applications / Architectures
@@ -323,53 +370,6 @@ Efficient Batch Analysis in Streaming Applications / Architectures
     .saveToCassandra("ml_predictions_keyspace", "predictions")
 
 ```
----
-
-AD 3-4 slides FOR DRIVE BY
-
-## Spark Streaming
-
-<center>
-![](spark-streaming.png)
-</center>
-
-- One runtime for streaming and batch processing
-- Join streaming and static data sets 
-- No code duplication
-- Easy Kafka stream integration
-- Easy, flexible data ingestion from disparate sources to disparate sinks
-- Easy to reconcile queries against multiple sources
-- Easy integration of KV durable storage
-
---
-
-## <span class="cassred">Cassandra</span>
-
-<center>
-![](cassandra.jpg)
-</center>
-
-- Horizontally scalable
-- Multi-Region / Multi-Datacenter
-- Always On - Survive regional outages
-- Extremely fast writes: - perfect for ingestion of real time / machine data
-- Very flexible data modelling (lists, sets, custom data types)
-- Easy to operate
-- Best of breed storage technology, huge community
-- **BUT: Simple queries only**
-- **OLTP-oriented**
-
----
-
-## Akka
-
-High performance concurrency framework for Scala and Java 
-Fault Tolerance
-Asynchronous messaging and data processing 
-Parallelization
-Location Transparency
-Local / Remote Routing 
-Akka: Cluster / Persistence / Streams
 
 ---
 
