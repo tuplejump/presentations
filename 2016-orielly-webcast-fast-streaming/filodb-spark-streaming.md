@@ -48,20 +48,20 @@
 
 ---
 
+## Tuplejump Consulting & Development
+
+<center>
+![](images/tj-consulting.png)
+</center>
+
+---
+
 <center>
 **Tuplejump Blender** 
 <small>Builds unified datasets for fast querying, streaming and batch sources, ML and Analytics</small>
 </center>
 <center>
 ![](images/tj-blender.png) 
-</center>
-
----
-
-## Tuplejump Consulting & Development
-
-<center>
-![](images/tj-consulting.png)
 </center>
 
 ---
@@ -135,12 +135,21 @@ budget</center>
 
 ## Only, It's Not A Stream It's A Flood
 
+Netflix
+
 - 100 billion events per day
 - 1-2 million events per second at peak
+
+Linkedin
+
 - 500 billion write events per day
 - 2.5 trillion read events per day
 - 4.5 million events per second at peak with Kafka
 - Petabytes of streaming data
+
+Confidential
+
+- 700 TB global ingested data (pre-filtered)
 
 ---
 
@@ -157,7 +166,9 @@ of data by taking advantage of both batch and stream processing methods.*
 ![Lamba Architecture](lambda-architecture-2-800.jpg)
 </center>
 
+<center>
 (https://www.mapr.com/developercentral/lambda-architecture)
+</center>
 
 ---
 
@@ -166,7 +177,6 @@ of data by taking advantage of both batch and stream processing methods.*
 - Can be a very complex pipeline
 - Many moving parts - KV store, real time, Batch technologies plus ETL...
 - Running similar code in two places
-- Still ingesting data to Parquet/HDFS 
 - Reconcile queries against two different places
 - Complicated logic changes across multiple systems (code)
 
@@ -237,8 +247,7 @@ Supporting code, machines, staff, monitoring and running services for multiple c
 
 ## A Unified Streaming Architecture
 <center>
-One unified system for streaming and batch: 
-</center>
+Everything On The Streaming Platform</center>
 <br/>
 
 - Scala / Spark Streaming
@@ -249,33 +258,74 @@ One unified system for streaming and batch:
 
 ---
 
-## What's Missing? One Pipeline For Fast + Big Data
+## First Snapshot The Raw Data
+For replay and reprocessing any time: for fault tolerance, logic changes..
 
-![](one-pipeline.mermaid.png)
-<!-- .element: class="mermaid" -->
+```scala
 
+     val stream = KafkaUtils.createDirectStream(...) .map(RawWeatherData(_))
+     stream.saveToCassandra(CassandraKeyspace, CassandraTableRaw)   
+
+```
+### Pre-Aggregation of streaming data for fast querying and further aggregation downstream
+in other secondary stream aggregation computations and scheduled batch computations:
+
+```scala
+
+     stream.map(hour => 
+       (hour.wsid, hour.year, hour.month, hour.day, hour.oneHourPrecip)
+     ).saveToCassandra(CassandraKeyspace, CassandraTableDailyPrecip)  
+
+```
+---
+
+Efficient Batch Analysis in Streaming Applications / Architectures
+
+```scala
+
+    class TemperatureActor(sc: SparkContext, settings: Settings) extends AggregationActor {   
+      import settings._
+      import akka.pattern.pipe
+       
+      def receive: Actor.Receive = {     
+        case e: GetMonthlyHiLowTemperature => highLow(e, sender)   
+      }     
+      
+      def highLow(e: GetMonthlyHiLowTemperature, requester: ActorRef): Unit =     
+        sc.cassandraTable[DailyTemperature](timeseriesKeyspace, dailyTempAggregTable)       
+          .where("wsid = ? AND year = ? AND month = ?", e.wsid, e.year, e.month)
+          .collectAsync()       
+          .map(MonthlyTemperature(_, e.wsid, e.year, e.month)) pipeTo requester
+    }
+    
+```
 
 ---
 
-### Big data is yesterday.
-# FAST DATA
-## is now.
+## Spark Streaming, MLLib, and Kafka, Cassandra, Akka
 
+```scala
+
+    val ssc = new StreamingContext(sparkConf, Seconds(5) 
+    val testData = ssc.cassandraTable[String](keyspace,table).map(LabeledPoint.parse)
+      val trainingStream = KafkaUtils.createDirectStream[..](..)
+        .map(transformFunc)
+        .map(LabeledPoint.parse)
+    
+    trainingStream.saveToCassandra("ml_training_keyspace", "raw_training_data")  
+    
+     val model = new StreamingLinearRegressionWithSGD()   
+      .setInitialWeights(Vectors.dense(weights))   
+      .trainOn(trainingStream)
+     
+    model
+    .predictOnValues(testData.map(lp => (lp.label, lp.features)))
+    .saveToCassandra("ml_predictions_keyspace", "predictions")
+
+```
 ---
 
-<center>
-![](Fast-Data-FSI-Whiteboard.png)
-</center>
-
----
-
-## Fast Data
-
-- Reactive processing of data as it comes in to derive instant insights.
-- Is this enough?
-- Usually need to combine with existing big data, historical processing, ad hoc.
-
---
+AD 3-4 slides FOR DRIVE BY
 
 ## Spark Streaming
 
@@ -283,7 +333,13 @@ One unified system for streaming and batch:
 ![](spark-streaming.png)
 </center>
 
-"What's New In Spark Streaming" - Tathagada Das, Strata NY 2015
+- One runtime for streaming and batch processing
+- Join streaming and static data sets 
+- No code duplication
+- Easy Kafka stream integration
+- Easy, flexible data ingestion from disparate sources to disparate sinks
+- Easy to reconcile queries against multiple sources
+- Easy integration of KV durable storage
 
 --
 
@@ -294,12 +350,40 @@ One unified system for streaming and batch:
 </center>
 
 - Horizontally scalable
+- Multi-Region / Multi-Datacenter
+- Always On - Survive regional outages
+- Extremely fast writes: - perfect for ingestion of real time / machine data
 - Very flexible data modelling (lists, sets, custom data types)
 - Easy to operate
-- Perfect for ingestion of real time / machine data
 - Best of breed storage technology, huge community
 - **BUT: Simple queries only**
 - **OLTP-oriented**
+
+---
+
+## Akka
+
+High performance concurrency framework for Scala and Java 
+Fault Tolerance
+Asynchronous messaging and data processing 
+Parallelization
+Location Transparency
+Local / Remote Routing 
+Akka: Cluster / Persistence / Streams
+
+---
+
+## What's Missing? One Pipeline For Fast + Big Data
+
+![](one-pipeline.mermaid.png)
+<!-- .element: class="mermaid" -->
+
+---
+Before handing off to evan,
+
+Tuplejump OSS Roadmap
+- Gearpump FiloDB
+- Kafka Connect FiloDB
 
 --
 
