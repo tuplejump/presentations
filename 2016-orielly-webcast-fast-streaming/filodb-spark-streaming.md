@@ -413,21 +413,6 @@ sqlContext.sql("SELECT count(monthyear) FROM gdelt").show()
 
 ---
 
-## What about Parquet?
-
-- Good for static data
-- Problem: Parquet is read-optimized, not easy to use for writes
-    + Cannot support idempotent writes
-    + Optimized for writing very large chunks, not small updates
-    + Not suitable for time series, IoT, etc.
-    + Often needs multiple passes of jobs for compaction of small files, deduplication, etc.
-
-&nbsp;
-<p>
-People really want a database-like abstraction, not a file format!
-
---
-
 ## What are my storage needs?
 
 - Non-persistent / in-memory: concurrent viewers
@@ -815,6 +800,28 @@ For more details, see [this blog post](http://velvia.github.io/Spark-Concurrent-
 
 - Predict time to get to destination based on pickup point, time of day, other vars
 - Need to read all data (full table scan)
+
+--
+
+```scala
+val ssc = new StreamingContext(sparkConf, Seconds(5) )
+val testData = ssc.cassandraTable[String](keyspace, table)
+  .map(LabeledPoint.parse)
+      
+val trainingStream = KafkaUtils.createDirectStream[..](..)
+    .map(transformFunc)
+    .map(LabeledPoint.parse)
+    
+trainingStream.foreachRDD(_.toDF.write.format("filodb.spark")
+                                .option("dataset", "training").save())
+    
+ val model = new StreamingLinearRegressionWithSGD()   
+  .setInitialWeights(Vectors.dense(weights))   
+  .trainOn(trainingStream)
+     
+model.predictOnValues(testData.map(lp => (lp.label, lp.features)))
+     .insertIntoFilo("predictions")
+```
 
 --
 
