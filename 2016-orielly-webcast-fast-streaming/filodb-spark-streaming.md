@@ -298,18 +298,18 @@ Everything On The Streaming Platform</center>
 <center>Replay / reprocessin: for fault tolerance, logic changes..</center>
 
 ```scala
-     val stream = KafkaUtils.createDirectStream(...) .map(RawWeatherData(_))
-     stream
-       .foreachRDD(_.toDF.write.format("filodb.spark")
-       .option(rawDataKeyspace, rawDataTable))
-```
-## Pre-Aggregate Data In The Stream 
-<center>For fast querying and further aggregation later</center>
-
-```scala
-     stream.map(hour => 
-       (hour.wsid, hour.year, hour.month, hour.day, hour.oneHourPrecip)
-     ).saveToCassandra(CassandraKeyspace, CassandraTableDailyPrecip)  
+class KafkaStreamingActor(ssc: StreamingContext, settings: Settings) extends AggregationActor {   
+  val stream = KafkaUtils.createDirectStream(...) .map(RawWeatherData(_))
+  stream
+    .foreachRDD(_.toDF.write.format("filodb.spark")
+    .option(rawDataKeyspace, rawDataTable))
+ 
+  /* Pre-Aggregate data in the stream for fast querying and aggregation later. */
+ 
+   stream.map(hour => 
+     (hour.wsid, hour.year, hour.month, hour.day, hour.oneHourPrecip)
+  ).saveToCassandra(CassandraKeyspace, CassandraTableDailyPrecip)  
+}
 ```
 
 ---
@@ -318,22 +318,20 @@ Everything On The Streaming Platform</center>
 #### Compute isolation in Akka Actor
 
 ```scala
-
-    class TemperatureActor(sc: SparkContext, settings: Settings) extends AggregationActor {   
-      import settings._
-      import akka.pattern.pipe
-       
-      def receive: Actor.Receive = {     
-        case e: GetMonthlyHiLowTemperature => highLow(e, sender)   
-      }     
-      
-      def highLow(e: GetMonthlyHiLowTemperature, requester: ActorRef): Unit =     
-        sc.cassandraTable[DailyTemperature](timeseriesKeyspace, dailyTempAggregTable)       
-          .where("wsid = ? AND year = ? AND month = ?", e.wsid, e.year, e.month)
-          .collectAsync()       
-          .map(MonthlyTemperature(_, e.wsid, e.year, e.month)) pipeTo requester
-    }
-    
+class TemperatureActor(sc: SparkContext, settings: Settings) extends AggregationActor {   
+  import settings._
+  import akka.pattern.pipe
+  
+  def receive: Actor.Receive = {     
+    case e: GetMonthlyHiLowTemperature => highLow(e, sender)   
+  }     
+  
+  def highLow(e: GetMonthlyHiLowTemperature, requester: ActorRef): Unit =     
+    sc.cassandraTable[DailyTemperature](timeseriesKeyspace, dailyTempAggregTable)       
+      .where("wsid = ? AND year = ? AND month = ?", e.wsid, e.year, e.month)
+      .collectAsync()       
+      .map(MonthlyTemperature(_, e.wsid, e.year, e.month)) pipeTo requester
+}
 ```
 
 ---
