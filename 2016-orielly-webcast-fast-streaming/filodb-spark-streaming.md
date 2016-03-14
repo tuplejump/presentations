@@ -234,8 +234,8 @@ Everything On The Streaming Platform</center>
 
 ---
 
-## Apache Spark, Spark Streaming & Spark MLLib
-
+## Apache Spark Streaming  
+ 
 <center>
 ![](spark-streaming.png)
 </center>
@@ -250,13 +250,16 @@ Everything On The Streaming Platform</center>
 
 ---
 
-## Apache Kafka
-
 <center>
-![](cassandra.jpg)
+![](images/kafka-logo-wide.png)
 </center>
 
-- Horizontally scalable
+- High Throughput Distributed Messaging
+- Decouples Data Pipelines
+- Handles Massive Data Load
+- Support Massive Number of Consumers
+- Distribution & partitioning across cluster nodes 
+- Automatic recovery from broker failures
 
 ---
 
