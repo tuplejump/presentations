@@ -292,15 +292,17 @@ Everything On The Streaming Platform</center>
 
 ---
 
-## Akka
+<center>
+![](images/akka.png)
+</center>
 
-High performance concurrency framework for Scala and Java 
-Fault Tolerance
-Asynchronous messaging and data processing 
-Parallelization
-Location Transparency
-Local / Remote Routing 
-Akka: Cluster / Persistence / Streams
+- High performance concurrency framework for Scala and Java 
+- Fault Tolerance
+- Asynchronous messaging and data processing 
+- Parallelization
+- Location Transparency
+- Local / Remote Routing 
+- Akka: Cluster / Persistence / Streams
 
 ---
 
