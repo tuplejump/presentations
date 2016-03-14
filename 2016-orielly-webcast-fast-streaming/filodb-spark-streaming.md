@@ -747,6 +747,10 @@ For more details, see [this blog post](http://velvia.github.io/Spark-Concurrent-
 - Can store scored raw data / predictions back in FiloDB
   + for fast user queries
 
+--
+
+![](FiloDB_Cass_Together.002.jpg)
+
 ---
 
 ## Integrating Historical and Streaming Workloads
