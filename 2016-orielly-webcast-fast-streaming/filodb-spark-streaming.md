@@ -353,7 +353,6 @@ Efficient Batch Analysis in Streaming Applications / Architectures
 ## Kafka, Cassandra, Akka
 
 ```scala
-
 val ssc = new StreamingContext(sparkConf, Seconds(5) 
 val testData = ssc.cassandraTable[String](keyspace,table)
   .map(LabeledPoint.parse)
@@ -362,8 +361,7 @@ val trainingStream = KafkaUtils.createDirectStream[..](..)
     .map(transformFunc)
     .map(LabeledPoint.parse)
     
-trainingStream
-  .saveToCassandra("ml_training_keyspace", "raw_training_data")  
+trainingStream.saveToCassandra("ml_training_keyspace", "raw_training_data")  
     
  val model = new StreamingLinearRegressionWithSGD()   
   .setInitialWeights(Vectors.dense(weights))   
