@@ -234,7 +234,7 @@ Everything On The Streaming Platform</center>
 
 ---
 
-## Spark Streaming
+## Apache Spark, Spark Streaming & Spark MLLib
 
 <center>
 ![](spark-streaming.png)
@@ -250,7 +250,17 @@ Everything On The Streaming Platform</center>
 
 ---
 
-## <span class="cassred">Cassandra</span>
+## Apache Kafka
+
+<center>
+![](cassandra.jpg)
+</center>
+
+- Horizontally scalable
+
+---
+
+## <span class="cassred">Apache Cassandra</span>
 
 <center>
 ![](cassandra.jpg)
