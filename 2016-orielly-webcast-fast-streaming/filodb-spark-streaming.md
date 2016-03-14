@@ -217,9 +217,9 @@ in parallel"*
 
 ---
 
-## Can We Not process N-Streams In Parallel Already?
+## Are Batch and Streaming Systems Fundamentally Different?
 
-<center>Yes.</center>
+<center>No.</center>
 
 ---
 
@@ -304,29 +304,28 @@ Akka: Cluster / Persistence / Streams
 
 ---
 
-## First Snapshot The Raw Data
-For replay and reprocessing any time: for fault tolerance, logic changes..
+## Immutable Raw Data From Kafka Stream
+<center>Replay / reprocessin: for fault tolerance, logic changes..</center>
 
 ```scala
-
      val stream = KafkaUtils.createDirectStream(...) .map(RawWeatherData(_))
-     stream.saveToCassandra(CassandraKeyspace, CassandraTableRaw)   
-
+     stream
+       .foreachRDD(_.toDF.write.format("filodb.spark")
+       .option(rawDataKeyspace, rawDataTable))
 ```
-### Pre-Aggregation of streaming data for fast querying and further aggregation downstream
-in other secondary stream aggregation computations and scheduled batch computations:
+## Pre-Aggregate Data In The Stream 
+<center>For fast querying and further aggregation later</center>
 
 ```scala
-
      stream.map(hour => 
        (hour.wsid, hour.year, hour.month, hour.day, hour.oneHourPrecip)
      ).saveToCassandra(CassandraKeyspace, CassandraTableDailyPrecip)  
-
 ```
 
 ---
 
-Efficient Batch Analysis in Streaming Applications / Architectures
+### Reading Data Back From Cassandra
+#### Compute isolation in Akka Actor
 
 ```scala
 
@@ -350,14 +349,14 @@ Efficient Batch Analysis in Streaming Applications / Architectures
 ---
 
 ## Spark Streaming, MLLib
-## Kafka, Cassandra, Akka
+## Kafka, Cassandra
 
 ```scala
 val ssc = new StreamingContext(sparkConf, Seconds(5) 
 val testData = ssc.cassandraTable[String](keyspace,table)
   .map(LabeledPoint.parse)
       
-val trainingStream = KafkaUtils.createDirectStream[..](..)
+val trainingStream = KafkaUtils.createDirectStream[_,_,_,_](..)
     .map(transformFunc)
     .map(LabeledPoint.parse)
     
@@ -375,17 +374,17 @@ model
 
 ---
 
+## Tuplejump OSS Roadmap
+
+- [Gearpump](http://www.gearpump.io/overview.html) gearpump-external-filodb
+- Kafka Connect FiloDB
+
+---
+
 ## What's Missing? One Pipeline For Fast + Big Data
 
 ![](one-pipeline.mermaid.png)
 <!-- .element: class="mermaid" -->
-
----
-Before handing off to evan,
-
-Tuplejump OSS Roadmap
-- Gearpump FiloDB
-- Kafka Connect FiloDB
 
 --
 
