@@ -264,7 +264,7 @@ Everything On The Streaming Platform</center>
 ## <span class="cassred">Apache Cassandra</span>
 
 <center>
-![](cassandra.jpg)
+![](cassandra.jpg) 
 </center>
 
 - Horizontally scalable
@@ -306,7 +306,7 @@ Everything On The Streaming Platform</center>
 ---
 
 ## Immutable Raw Data From Kafka Stream
-<center>Replay / reprocessin: for fault tolerance, logic changes..</center>
+<center>Replay / reprocessing: for fault tolerance, logic changes..</center>
 
 ```scala
 class KafkaStreamingActor(ssc: StreamingContext, settings: Settings) extends AggregationActor {   
