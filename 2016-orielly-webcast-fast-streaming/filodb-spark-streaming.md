@@ -533,6 +533,7 @@ Rich sweet layers of distributed, versioned database goodness
 
 - One enterprise with many TB of financial and reporting data is moving their data warehouse to FiloDB + Cassandra + Spark
 - Another startup uses FiloDB as event storage, feeds the events into Spark MLlib, scores incoming data, then stores the results back in FiloDB for low-latency use cases
+  + From their CTO: “I see close to MemSQL / Vertica or even better”  “More cost effective than Redshift”
 
 ---
 
