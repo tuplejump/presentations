@@ -210,6 +210,7 @@ in parallel"*
 
 <center>
 ![](images/architectyr.jpg)
+<!-- .element: class="fullwidth" -->
 </center>
 
 ---
@@ -250,6 +251,7 @@ Everything On The Streaming Platform</center>
 
 <center>
 ![](images/kafka-logo-wide.png)
+<!-- .element: class="mermaid" -->
 </center>
 
 - High Throughput Distributed Messaging
@@ -620,7 +622,8 @@ Space savings: 27 `*` 2 = **54x**
 - Two tables were switched from regular Cassandra tables to FiloDB tables.  40-60 columns each, ~60k items in partition.
 - Scan times went down from 5-6 seconds to < 250ms
 
-For more details, please see blog post: XXXX
+<p>
+For more details, please see this [Planet Cassandra blog post](http://www.planetcassandra.org/blog/achieving-sub-second-sql-joins-and-building-a-data-warehouse-using-spark-cassandra-and-filodb/).
 
 ---
 
