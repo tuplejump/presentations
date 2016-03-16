@@ -234,6 +234,14 @@ Everything On The Streaming Platform</center>
 
 ---
 
+## SNACK
+
+<center>
+![](images/snack-stack.png)
+</center>
+
+---
+
 ## Apache Spark Streaming  
  
 <center>
