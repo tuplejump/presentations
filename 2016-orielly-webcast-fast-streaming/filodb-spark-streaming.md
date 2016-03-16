@@ -75,7 +75,6 @@
 * Data Warehousing with Spark, Cassandra, and FiloDB
 * Time series / event data / geospatial examples
 * Machine learning using Spark MLLib + Cassandra/FiloDB
-* Integrating streaming and historical data analysis
 
 ---
 
@@ -211,6 +210,7 @@ in parallel"*
 
 <center>
 ![](images/architectyr.jpg)
+<!-- .element: class="fullwidth" -->
 </center>
 
 ---
@@ -259,6 +259,7 @@ Everything On The Streaming Platform</center>
 
 <center>
 ![](images/kafka-logo-wide.png)
+<!-- .element: class="mermaid" -->
 </center>
 
 - High Throughput Distributed Messaging
@@ -396,43 +397,11 @@ model
 
 ---
 
-## What are my storage needs?
-
-- Non-persistent / in-memory: concurrent viewers
-- Short term: latest trends
-- Longer term: raw event and aggregate storage
-- ML Models, predictions, scored data
-
---
-
-## Spark RDDs
-
-- Immutable, cache in memory and/or on disk
-- Spark Streaming: UpdateStateByKey
-- IndexedRDD - can update bits of data
-- Snapshotting for recovery
-
---
-
-## Using Cassandra for Short Term Storage
-
-|          | 1020s | 1010s | 1000s |
-| -------- | ----- | ----- | ----- |
-| Bus A    | Speed, GPS |   |      |
-| Bus B    |       |        |      |
-| Bus C    |       |        |      |
-
-- Primary key = (Bus UUID, timestamp)
-- Easy queries: location and speed of single bus for a range of time
-- Can also query most recent location + speed of all buses (slower)
-
---
-
-## Using Cassandra for Longer-Term Event Storage / ML?
+## Using Cassandra for Batch Analytics / Event Storage / ML?
 
 - Storage efficiency and scan speeds for reading large volumes of data (for complex analytics, ML) become important concerns
 - Regular Cassandra CQL tables are not very good at either storage efficiency or scan speeds
-- Have to be a bit creative with how you store data in Cassandra  :)
+- A different, analytics-optimized solution is needed...
 
 ---
 
@@ -568,14 +537,11 @@ Rich sweet layers of distributed, versioned database goodness
 
 --
 
-![](FiloDB_Cass_Together.002.jpg)
-
---
-
 ## Being Productionized as we speak...
 
 - One enterprise with many TB of financial and reporting data is moving their data warehouse to FiloDB + Cassandra + Spark
 - Another startup uses FiloDB as event storage, feeds the events into Spark MLlib, scores incoming data, then stores the results back in FiloDB for low-latency use cases
+  + From their CTO: “I see close to MemSQL / Vertica or even better”  “More cost effective than Redshift”
 
 ---
 
@@ -665,7 +631,8 @@ Space savings: 27 `*` 2 = **54x**
 - Two tables were switched from regular Cassandra tables to FiloDB tables.  40-60 columns each, ~60k items in partition.
 - Scan times went down from 5-6 seconds to < 250ms
 
-For more details, please see blog post: XXXX
+<p>
+For more details, please see this [Planet Cassandra blog post](http://www.planetcassandra.org/blog/achieving-sub-second-sql-joins-and-building-a-data-warehouse-using-spark-cassandra-and-filodb/).
 
 ---
 
@@ -705,27 +672,7 @@ One-line change to write to FiloDB vs Cassandra
 
 --
 
-## Modeling Time Series with FiloDB
-
-| Entity  | Time1 | Time2 |
-| ------- | ----- | ----- |
-| US-0123 | d1    | d2    |
-| NZ-9495 | d1    | d2    |
-
-&nbsp;<p>
-Model your time series with FiloDB similarly to Cassandra:
-
-- **Segment key**: `:timeslice timestamp 4h`
-- **Partition Keys**:
-  - Event/machine UUID (smaller # of events)
-  - Event/machine UUID hash + time period
-* **Row Keys**: Timestamp, machine UUID
-
-FiloDB keeps data sorted while stored in efficient columnar storage.
-
---
-
-## Modeling the NYC Taxi Dataset
+## Modeling example: NYC Taxi Dataset
 
 The public [NYC Taxi Dataset](http://www.andresmh.com/nyctaxitrips/) contains telemetry (pickup, dropoff locations, times) info on millions of taxi rides in NYC.
 
@@ -736,6 +683,7 @@ The public [NYC Taxi Dataset](http://www.andresmh.com/nyctaxitrips/) contains te
 
 * Partition key - `:stringPrefix medallion 2` - hash multiple drivers trips into ~300 partitions
 * Segment key - `:timeslice pickup_datetime 6d`
+* Row key - hack_license, pickup_datetime
 
 Allows for easy filtering by individual drivers, and slicing by time.
 
@@ -782,28 +730,6 @@ For more details, see [this blog post](http://velvia.github.io/Spark-Concurrent-
 
 --
 
-```scala
-val ssc = new StreamingContext(sparkConf, Seconds(5) )
-val testData = ssc.cassandraTable[String](keyspace, table)
-  .map(LabeledPoint.parse)
-      
-val trainingStream = KafkaUtils.createDirectStream[..](..)
-    .map(transformFunc)
-    .map(LabeledPoint.parse)
-    
-trainingStream.foreachRDD(_.toDF.write.format("filodb.spark")
-                                .option("dataset", "training").save())
-    
- val model = new StreamingLinearRegressionWithSGD()   
-  .setInitialWeights(Vectors.dense(weights))   
-  .trainOn(trainingStream)
-     
-model.predictOnValues(testData.map(lp => (lp.label, lp.features)))
-     .insertIntoFilo("predictions")
-```
-
---
-
 ## Dynamic models are better than static models
 
 - Everything changes!
@@ -811,20 +737,38 @@ model.predictOnValues(testData.map(lp => (lp.label, lp.features)))
 
 --
 
-## The FiloDB Advantage for ML
-
-- Able to update dynamic models based on massive data flow/updates
-- More data -> better models!
-- Can store scored raw data / predictions back in FiloDB
-  + for fast user queries
+```scala
+val ssc = new StreamingContext(sparkConf, Seconds(5) )
+val dataStream = KafkaUtils.createDirectStream[..](..)
+    .map(transformFunc)
+    .map(LabeledPoint.parse)
+    
+dataStream.foreachRDD(_.toDF.write.format("filodb.spark")
+                                .option("dataset", "training").save())
+    
+if (trainNow) {
+   var model = new StreamingLinearRegressionWithSGD()   
+    .setInitialWeights(Vectors.dense(weights))   
+    .trainOn(dataStream.join(historicalEvents))
+}
+     
+model.predictOnValues(dataStream.map(lp => (lp.label, lp.features)))
+     .insertIntoFilo("predictions")
+```
 
 --
 
 ![](FiloDB_Cass_Together.002.jpg)
 
----
+--
 
-## Integrating Historical and Streaming Workloads
+## The FiloDB Advantage for ML
+
+- Able to update dynamic models based on massive data flow/updates
+  + Integrate historical and recent events to build models
+- More data -> better models!
+- Can store scored raw data / predictions back in FiloDB
+  + for fast user queries
 
 ---
 
@@ -840,15 +784,6 @@ Your input is appreciated!
 
 ---
 
-## You can help!
-
-- Send me your use cases for fast big data analysis on Spark and Cassandra
-    + Especially IoT, Event, Time-Series
-    + What is your data model?
-- Email if you want to contribute
-
----
-
 ## Thanks For Attending!
  
 - [@helenaedelson](https://twitter.com/helenaedelson)
@@ -858,6 +793,38 @@ Your input is appreciated!
 ---
 
 # EXTRA SLIDES
+
+---
+
+## What are my storage needs?
+
+- Non-persistent / in-memory: concurrent viewers
+- Short term: latest trends
+- Longer term: raw event and aggregate storage
+- ML Models, predictions, scored data
+
+--
+
+## Spark RDDs
+
+- Immutable, cache in memory and/or on disk
+- Spark Streaming: UpdateStateByKey
+- IndexedRDD - can update bits of data
+- Snapshotting for recovery
+
+--
+
+## Using Cassandra for Short Term Storage
+
+|          | 1020s | 1010s | 1000s |
+| -------- | ----- | ----- | ----- |
+| Bus A    | Speed, GPS |   |      |
+| Bus B    |       |        |      |
+| Bus C    |       |        |      |
+
+- Primary key = (Bus UUID, timestamp)
+- Easy queries: location and speed of single bus for a range of time
+- Can also query most recent location + speed of all buses (slower)
 
 ---
 
