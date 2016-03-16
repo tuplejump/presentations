@@ -234,7 +234,7 @@ Everything On The Streaming Platform</center>
 
 ---
 
-## SNACK
+## SNACK Stack
 
 <center>
 ![](images/snack-stack.png)
