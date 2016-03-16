@@ -41,7 +41,7 @@
 ## ![](images/tuplejump_circle-sm.png) [Tuplejump](http://tuplejump.com) Open Source: on GitHub
 
 * [FiloDB](http://github.com/tuplejump/FiloDB) - Subject of today's talk
-* [Kafka Connect Cassandra](http://github.com/tuplejump/kafka-connector) - Kafka-Cassandra Source and Sink
+* [Kafka Connect Cassandra](http://github.com/tuplejump/kafka-connect-cassandra) - Kafka-Cassandra Source and Sink
 * [Calliope](http://tuplejump.github.io/calliope/) - The first Spark Cassandra integration
 * [Stargate](http://tuplejump.github.io/stargate/) - Lucene indexer for Cassandra
 * [SnackFS](https://github.com/tuplejump/snackfs) - HDFS for Cassandra
