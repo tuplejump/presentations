@@ -208,6 +208,7 @@ in parallel"*
 
 ## Technical Debt
 
+<center>It's the wild west</center>
 <center>
 ![](images/architectyr.jpg)
 <!-- .element: class="fullwidth" -->
@@ -234,7 +235,7 @@ Everything On The Streaming Platform</center>
 
 ---
 
-## SNACK Stack
+## SNACK (SMACK) Stack
 
 <center>
 ![](images/snack-stack.png)
@@ -520,7 +521,7 @@ Rich sweet layers of distributed, versioned database goodness
 
 --
 
-## SMACK stack for all your Analytics
+## SNACK (SMACK) stack for all your Analytics
 
 ![](simple-architecture.mermaid.png)
 <!-- .element: class="mermaid" -->
