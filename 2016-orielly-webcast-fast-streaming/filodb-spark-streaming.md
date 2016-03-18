@@ -208,7 +208,6 @@ in parallel"*
 
 ## Technical Debt
 
-<center>It's the wild west</center>
 <center>
 ![](images/architectyr.jpg)
 <!-- .element: class="fullwidth" -->
