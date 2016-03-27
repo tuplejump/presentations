@@ -70,6 +70,7 @@
 ## Topics
 
 * Modern streaming architectures and batch/ad-hoc architectures
+* Simplifying Architecture
 * Precise and scalable streaming ingestion using Kafka, Akka, Spark Streaming, Cassandra, and FiloDB
 * How a unified streaming + batch stack can lower your TCO
 * What FiloDB is and how it enables fast analytics with competitive storage cost
@@ -80,20 +81,22 @@
 ---
 
 ## The Problem Domain
-Build scalable, adaptable, self-healing, distributed data processing systems for
+<br/>
+Build scalable, adaptable, self-healing, distributed data processing systems that handle
  
-- Massive amounts of data 
+- Terabytes of data 
 - Disparate sources and schemas
 - Differing data structures
 - Complex analytics and learning tasks
-- To run as large-scale clustered dataflows
-- 24-7 Uptime
+- Run as large-scale clustered dataflows
+- 24/7 Uptime
 - Globally clustered deployments
 - No data loss
 
 ---
 
 ## Delivering Meaning
+<br/>
 
 - Deliver meaning in sec/sub-sec latency
 - Billions of events per second
@@ -103,7 +106,8 @@ Build scalable, adaptable, self-healing, distributed data processing systems for
 
 ---
 
-## While We Monitor, Predict & Proactively Handle
+## Self-Healing Systems
+<br/>
 
 - Massive event spikes & bursty traffic
 - Fast producers / slow consumers
@@ -136,22 +140,53 @@ budget</center>
 ---
 
 ## Only, It's Not A Stream It's A Flood
+<br/>
 
-Netflix
-
-- 100 billion events per day
-- 1-2 million events per second at peak
-
-Linkedin
-
-- 500 billion write events per day
-- 2.5 trillion read events per day
-- 4.5 million events per second at peak with Kafka
+- Billions of write events per day
+- Trillions of read events per day
+- Millions of events per second at peak
 - Petabytes of streaming data
 
-Confidential
+---
 
-- 700 TB global ingested data (pre-filtered)
+## Stream Processing
+<br/> 
+** Sub-Second Latency Use Cases**
+
+- Flink
+- Storm
+- Samza
+- Gearpump
+- Kafka
+
+<br/> 
+** > Sub-Second Latency Use Cases**
+
+- Spark Streaming
+  - Micro batch architecture
+
+---
+
+## Streaming Data Flows In A Nutshell
+<br/>
+
+- Ingest terabytes of immutable event streams
+- Parallel raw data streams:
+  - To Storage for replay on:
+    - Logic changes, e.g. analytics and ML algorithms
+    - Failure
+  - To Analytics cluster
+    - Streaming data run across the cluster
+    - Continuously aggregated results stored for fast querying
+- Fanout to Analytics and ML data stream subscribers
+
+---
+
+## Legacy Infrastructure
+<br/>
+
+- Highly-invested-in existing architecture around Hadoop
+- Existing analytics logic for scheduled MR jobs
 
 ---
 
@@ -174,44 +209,56 @@ of data by taking advantage of both batch and stream processing methods.*
 
 ---
 
-## Challenge Assumptions
+## λ The Good
+<br/>
+
+- Immutability - retaining master data
+  - With timestamped events
+  - Appended versus overwritten events
+- Attempt to beat CAP
+- Pre-computed views for 
+  - further processing
+  - faster ad-hoc querying
+
+---
+
+## λ The Bad
+<br/>
+
+- Two Analytics systems to support
+- Operational complexity
+- By the time a scheduled job is run 90% of the data is stale
+- Many moving parts: KV store, real time platform, batch technologies
+- Running similar code and reconciling queries in *dual systems*
+- Analytics logic changes on *dual systems*
+
+---
+
+## λ The Overly Complicated
+<br/>
 
 <center>
-*"Ingest an immutable sequence of records is captured and fed into<br/> 
-a batch processing system<br/> 
-and a stream processing system<br/> 
-in parallel"*
+*Immutable sequence of records is ingested and fed into*
 </center>
+<br/> 
 
----
+- a batch processing system
+- and a stream processing system 
+- in parallel
 
-## Lambda Architecture
+<br/>
 
-**Dual Analytics Systems**
-
-- Many moving parts: KV store, real time, Batch technologies
-- Running similar code and reconciling queries in dual systems
-
-
-**Overly Complicated**
-
-- Pipelines
-- Ops: e.g. performance tuning & monitoring, upgrades...
-- Analytics logic changes: dev/testing/deploys of changes to code bases,  clusters
-
----
-
-## Ultimately High TCO
-
-### And...
+### Ultimately Very High TCO And...
 
 ---
 
 ## Technical Debt
 
 <center>
-![](images/architectyr.jpg)
+![](images/data-flow-ugly.png)
 <!-- .element: class="fullwidth" -->
+<br/>
+Evolution? Or just addition.
 </center>
 
 ---
@@ -243,8 +290,49 @@ Everything On The Streaming Platform</center>
 
 ---
 
-## Apache Spark Streaming  
- 
+<center>
+![](images/kafka-logo-wide.png)
+<!-- .element: class="mermaid" -->
+</center>
+
+- High Throughput Distributed Messaging
+- PubSub messaging, rethought as a distributed commit log
+- Decouples Data Pipelines
+- Fast & Handles Massive Data Load
+  - 1,100,000,000,000 msg/day, 175+ TB/day
+- Support Massive Number of Consumers
+- Distribution & partitioning across cluster nodes 
+- Automatic recovery from broker failures
+
+---
+
+## Stream Processing Simplified
+
+### Kafka Streams
+
+- New Kafka Streams coming in v0.10
+- Removes the need to run another framework like Storm alongside Kafka
+- Removes the need for separate infrastructures
+
+---
+
+## Kafka Streams
+
+A library for building streaming applications, specifically applications that transform input Kafka topics into 
+output Kafka topics, with concise code, distribution and fault tolerance.
+
+- Common stream operations, e.g. join, filter, map, etc.
+- Windowing
+- Proper time modeling, e.g. event time vs. processing time
+- Local state management with persistence and replication
+- Schema and Avro support
+
+---
+
+## Spark Streaming  
+
+<center>Iterative ML, Interactive Querying, Graph, DataFrames</center>
+
 <center>
 ![](spark-streaming.png)
 </center>
@@ -255,20 +343,6 @@ Everything On The Streaming Platform</center>
 - Easy Kafka stream integration
 - Easy to reconcile queries against multiple sources
 - Easy integration of KV durable storage
-
----
-
-<center>
-![](images/kafka-logo-wide.png)
-<!-- .element: class="mermaid" -->
-</center>
-
-- High Throughput Distributed Messaging
-- Decouples Data Pipelines
-- Handles Massive Data Load
-- Support Massive Number of Consumers
-- Distribution & partitioning across cluster nodes 
-- Automatic recovery from broker failures
 
 ---
 
@@ -312,12 +386,32 @@ Everything On The Streaming Platform</center>
 <center>
 ![](images/reactive-vs-predictive.jpg)
 </center>
-<center>Show me the code</center>
+
+<center>Show me the codez</center>
+
+---
+
+## Kafka Streams
+
+```scala
+val builder = new KStreamBuilder()
+val stream: KStream[K,V] = builder.stream(kdes,vdes, "raw.data.topic")
+  .flatMapValues(value -> Arrays.asList(value.toLowerCase.split("")
+  .map((k,v) -> new KeyValue(k,v))
+  .countByKey(...)
+  .toStream()
+  
+stream.to("results.topic", ...)
+
+val streams = new KafkaStreams(builder, props)
+streams.start()
+
+```
 
 ---
 
 ## Immutable Raw Data From Kafka Stream
-<center>Replay / reprocessing: for fault tolerance, logic changes..</center>
+<center>Replaying data streams: for fault tolerance, logic changes..</center>
 
 ```scala
 class KafkaStreamingActor(ssc: StreamingContext, settings: Settings) extends AggregationActor {   
@@ -381,13 +475,6 @@ model
   .saveToCassandra("ml_predictions_keyspace", "predictions")
 
 ```
-
----
-
-## Tuplejump OSS Roadmap
-
-- [Gearpump](http://www.gearpump.io/overview.html) gearpump-external-filodb
-- Kafka Connect FiloDB
 
 ---
 
