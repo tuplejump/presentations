@@ -69,14 +69,14 @@
 
 ## Topics
 
-* Modern streaming architectures and batch/ad-hoc architectures
-* Simplifying Architecture
-* Precise and scalable streaming ingestion using Kafka, Akka, Spark Streaming, Cassandra, and FiloDB
-* How a unified streaming + batch stack can lower your TCO
-* What FiloDB is and how it enables fast analytics with competitive storage cost
-* Data Warehousing with Spark, Cassandra, and FiloDB
-* Time series / event data / geospatial examples
-* Machine learning using Spark MLLib + Cassandra/FiloDB
+- Modern streaming architectures and batch/ad-hoc architectures
+- Simplification
+- Precise and scalable streaming ingestion
+- FiloDB and fast analytics with competitive storage cost
+- Use Cases
+  - Data Warehousing with Spark, Cassandra, and FiloDB
+  - Time series / event data / geospatial examples
+  - Machine learning using Spark MLLib + Cassandra/FiloDB
 
 ---
 
