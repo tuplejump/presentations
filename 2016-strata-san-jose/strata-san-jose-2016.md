@@ -80,6 +80,17 @@
 
 ---
 
+## Delivering Meaning
+<br/>
+
+- Deliver meaning in sec/sub-sec latency
+- Billions of events per second
+- Low latency real time stream processing
+- Higher latency batch processing
+- Aggregation of global data from the stream
+
+---
+
 ## The Problem Domain
 <br/>
 Build scalable, adaptable, self-healing, distributed data processing systems that handle
@@ -92,17 +103,6 @@ Build scalable, adaptable, self-healing, distributed data processing systems tha
 - 24/7 Uptime
 - Globally clustered deployments
 - No data loss
-
----
-
-## Delivering Meaning
-<br/>
-
-- Deliver meaning in sec/sub-sec latency
-- Billions of events per second
-- Low latency real time stream processing
-- Higher latency batch processing
-- Aggregation of global data from the stream
 
 ---
 
