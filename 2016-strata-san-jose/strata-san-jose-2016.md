@@ -43,7 +43,7 @@
 
 ## ![](images/tuplejump_circle-sm.png) [Tuplejump](http://tuplejump.com) Open Source: on GitHub
 
-* [FiloDB](http://github.com/tuplejump/FiloDB) - Subject of today's talk
+* [FiloDB](http://github.com/tuplejump/FiloDB) - Distributed Spark + Cassandra analytics database
 * [Kafka Connect Cassandra](http://github.com/tuplejump/kafka-connect-cassandra) - Kafka-Cassandra Source and Sink
 * [Calliope](http://tuplejump.github.io/calliope/) - The first Spark Cassandra integration
 * [Stargate](http://tuplejump.github.io/stargate/) - Lucene indexer for Cassandra
@@ -628,6 +628,56 @@ Rich sweet layers of distributed, versioned database goodness
 - One enterprise with many TB of financial and reporting data is moving their data warehouse to FiloDB + Cassandra + Spark
 - Another startup uses FiloDB as event storage, feeds the events into Spark MLlib, scores incoming data, then stores the results back in FiloDB for low-latency use cases
   + From their CTO: “I see close to MemSQL / Vertica or even better”  “More cost effective than Redshift”
+
+---
+
+## FiloDB Use Cases
+
+* Data Warehousing / BI
+  - < 10 second SLA, nontrivial reports, some concurrency
+  - need to store and query lots of data efficiently
+* Time series
+  - idempotent write API, simultaneous write and read workloads
+* In-memory SQL web server
+  - Hundreds of queries per second using in-memory column store
+
+---
+
+## FiloDB vs HDFS/Parquet
+
+|    |  FiloDB  |  Parquet  |
+| --- | ------- | --------- |
+| Ingestion | Idempotent primary-key based; appends and replaces; deletes coming | File-based append API only  |
+| Filtering | Partition-key and segment-key filtering  | Mostly file-based  |
+| Scan speeds | Parquet-like  | Good for OLAP |
+| Storage cost | Within 35% of Parquet | &nbsp;  |
+<!-- .element: class="widetable" -->
+
+--
+
+## FiloDB vs HDFS/Parquet
+
+In practice, with good data modeling, FiloDB is a far better fit for low-latency / concurrent BI / reporting / dashboard applications.
+
+---
+
+## FiloDB vs Druid
+
+Different use cases:
+
+- Druid is optimized mostly for OLAP cube / slice and dice analysis.  Append only, keeps only aggregates, not a raw event store.
+- FiloDB stores raw data - can be used to build ML models, visualize and analyze raw time series data, do complex event flow analysis - much more flexible
+- FiloDB does not require data denormalization - can handle traditional BI star schemas with slowly changing dimension tables
+
+---
+
+## Come check out the demo!
+
+<center>
+![](images/FiloDB_taxi_notebook_demo.png)
+<p>
+Visit FiloDB at the Strata Developer Showcase today!
+</center>
 
 ---
 
