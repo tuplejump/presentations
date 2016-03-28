@@ -676,7 +676,7 @@ Different use cases:
 <center>
 ![](images/FiloDB_taxi_notebook_demo.png)
 <p>
-Visit FiloDB at the Strata Developer Showcase today!
+Visit FiloDB at the Developer Showcase (Expo hall) today!
 </center>
 
 ---
