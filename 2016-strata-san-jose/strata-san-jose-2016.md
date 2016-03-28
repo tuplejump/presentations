@@ -263,7 +263,6 @@ of data by taking advantage of both batch and stream processing methods.*
 <center>
 ![](images/ww2.jpg)
 <!-- .element: class="fullwidth" -->
-(Technical Debt)
 ![](images/data-flow-ugly.png)
 <!-- .element: class="fullwidth" -->
 </center>
