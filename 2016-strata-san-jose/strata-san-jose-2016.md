@@ -23,13 +23,15 @@
 ---
 
 ## Helena Edelson
+<center>[@helenaedelson](https://twitter.com/helenaedelson) | [`github.com/helena`](http://github.com/helena)</center>
+<br/>
 
 - VP of Product Engineering, [Tuplejump](http://www.tuplejump.com)
+- Working on event-driven systems for 15 years
 - Committer: Kafka Connect Cassandra, Spark Cassandra Connector
-- Contributor to Akka (2 new features in Akka Cluster), Spring Integration
-- Speaker @ Spark Summit, Kafka Summit, Strata, QCon, Scala Days, Scala World, Philly ETE 
-- [@helenaedelson](https://twitter.com/helenaedelson)
-- [`http://github.com/helena`](http://github.com/helena)
+- Contributor: Akka, Spring Integration
+- Speaker: Spark Summit, Kafka Summit, Strata, QCon, Scala Days, Scala World, Philly ETE 
+
 
 ---
 
@@ -69,8 +71,8 @@
 
 ## Topics
 
-- Modern streaming architectures and batch/ad-hoc architectures
-- Simplification
+- Modern streaming and batch/ad-hoc architectures
+- Pitfalls and Simplification
 - Precise and scalable streaming ingestion
 - FiloDB and fast analytics with competitive storage cost
 - Use Cases
@@ -150,35 +152,31 @@ budget</center>
 ---
 
 ## Stream Processing
-<br/> 
-** Sub-Second Latency Use Cases**
+<br/>  
 
-- Flink
-- Storm
-- Samza
-- Gearpump
-- Kafka
-
-<br/> 
-** > Sub-Second Latency Use Cases**
-
-- Spark Streaming
-  - Micro batch architecture
+- Storm - Real-time Analytics, ML, needs Trident to stream
+- Flink - Real-time Analytics, ML, Graph 
+- Gearpump - Real-time big data streaming
+- Spark Streaming - Micro-batch Analytics, ML, Graph
+- Kafka - Foundation to streaming architecture
+- Samza - Just streaming
 
 ---
 
 ## Streaming Data Flows In A Nutshell
 <br/>
 
-- Ingest terabytes of immutable event streams
-- Parallel raw data streams:
-  - To Storage for replay on:
-    - Logic changes, e.g. analytics and ML algorithms
-    - Failure
-  - To Analytics cluster
-    - Streaming data run across the cluster
-    - Continuously aggregated results stored for fast querying
-- Fanout to Analytics and ML data stream subscribers
+- Real-time ingestion, terabytes of immutable event streams
+- Dispatch service
+- To Kafka - raw data topics
+  - Raw data subscribers
+    - Raw Data storage - for replay from any point in time
+    - Analytics/ML/Timeseries clusters
+      - Continuous computation in the stream
+      - Pre-aggregating event data
+      - Store results for fast querying
+- To Kafka - aggregated results
+    - Fanout to Analytics and ML stream subscribers
 
 ---
 
