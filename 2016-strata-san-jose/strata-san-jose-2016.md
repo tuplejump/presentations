@@ -296,12 +296,12 @@ Everything On The Streaming Platform</center>
 </center>
 
 - High Throughput Distributed Messaging
-- PubSub messaging, rethought as a distributed commit log
-- Decouples Data Pipelines
-- Fast & Handles Massive Data Load
-  - 1,100,000,000,000 msg/day, 175+ TB/day
+- High Scalability - billions of events per day
+- Durability - no data loss
+- Immutability
 - Support Massive Number of Consumers
-- Distribution & partitioning across cluster nodes 
+- Very efficient and low latency
+- Decouples Data Pipelines
 - Automatic recovery from broker failures
 
 ---

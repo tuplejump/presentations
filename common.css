@@ -46,6 +46,12 @@ p {
   width: 100%;
 }
 
+.reveal .fullwidthheight {
+  width: 100%;
+  height: 100%;
+  valign: top;
+}
+
 .reveal table, .reveal th, .reveal td {
   border: 1px solid;
   padding: 3px;
