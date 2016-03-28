@@ -85,26 +85,45 @@
 ## Delivering Meaning
 <br/>
 
-- Deliver meaning in sec/sub-sec latency
+- Terabytes of data / day
 - Billions of events per second
-- Low latency real time stream processing
-- Higher latency batch processing
-- Aggregation of global data from the stream
+  - Sub-second, low latency stream processing
+  - Higher latency stream processing
+  - Batch / scheduled processing
+- Many data streams
+- Disparate sources and schemas
 
 ---
 
 ## The Problem Domain
 <br/>
 Build scalable, adaptable, self-healing, distributed data processing systems that handle
- 
-- Terabytes of data 
-- Disparate sources and schemas
-- Differing data structures
+
+- 24 / 7 system uptime
+  - Rolling restarts for streams
 - Complex analytics and learning tasks
-- Run as large-scale clustered dataflows
-- 24/7 Uptime
-- Globally clustered deployments
+- Aggregation of global data
+- Ops for global, multi-dc clustered data flows
+- Decoupled
+- Scale
 - No data loss
+- Idempotent
+
+---
+
+## Factors & Constraints in Architecture
+<br/>
+
+- Corner cases, Industry use cases
+- Legal constraints - user data crossing borders
+- % Writes on ingestion, % Reads 
+- How much in memory?
+- Counters? Geo-locational?
+- JDK version for cloud deployments
+- Dimensions of data in queries
+- What needs real time feedback loops
+
+### The list goes on...
 
 ---
 
@@ -117,16 +136,6 @@ Build scalable, adaptable, self-healing, distributed data processing systems tha
 - DC down 
 - Not DDOS'ing ourselves from fast streams
 - No data loss when auto-scaling down
-
----
-
-## And stay within our 
-<center>
-AWS<br/>
-OpenStack<br/>
-Rackspace...<br/> 
-
-budget</center>
 
 ---
 
@@ -144,39 +153,40 @@ budget</center>
 ## Only, It's Not A Stream It's A Flood
 <br/>
 
-- Billions of write events per day
-- Trillions of read events per day
+- Billions of writes per day
+- Trillions of read per day
 - Millions of events per second at peak
-- Petabytes of streaming data
+- Petabytes of total streaming data
 
 ---
 
-## Stream Processing
-<br/>  
-
-- Storm - Real-time Analytics, ML, needs Trident to stream
-- Flink - Real-time Analytics, ML, Graph 
-- Gearpump - Real-time big data streaming
-- Spark Streaming - Micro-batch Analytics, ML, Graph
-- Kafka - Foundation to streaming architecture
-- Samza - Just streaming
-
----
-
-## Streaming Data Flows In A Nutshell
+## Bounds of Data Ingestion
+<br/>
+<center>Individual stream patterns differ in daily, hourly, peak volume, frequency, peak spikes.</center>
 <br/>
 
-- Real-time ingestion, terabytes of immutable event streams
-- Dispatch service
-- To Kafka - raw data topics
-  - Raw data subscribers
-    - Raw Data storage - for replay from any point in time
-    - Analytics/ML/Timeseries clusters
-      - Continuous computation in the stream
-      - Pre-aggregating event data
-      - Store results for fast querying
-- To Kafka - aggregated results
-    - Fanout to Analytics and ML stream subscribers
+#### Real Time | Sub-second | Second and higher
+
+---
+
+## Real Time
+<center>Just means **Event Driven** or processing events as they arrive.
+        It doesn't automatically equal sub-second latency requirements.
+</center>
+
+---
+
+## Stream Processing 
+- Kafka - Foundation to streaming architecture
+- Samza - Just streaming
+- Gearpump - Real-time big data streaming
+
+<br/>
+
+## Analytics Stream Processing
+- Storm - Real-time Analytics, ML, needs Trident to stream
+- Flink - Real-time Analytics, ML, Graph 
+- Spark Streaming - Micro-batch Analytics, ML, Graph
 
 ---
 
@@ -250,20 +260,22 @@ of data by taking advantage of both batch and stream processing methods.*
 
 ---
 
-## Technical Debt
-
 <center>
+![](images/ww2.jpg)
+<!-- .element: class="fullwidth" -->
 ![](images/data-flow-ugly.png)
 <!-- .element: class="fullwidth" -->
-<br/>
-Evolution? Or just addition.
 </center>
 
 ---
 
 ## Are Batch and Streaming Systems Fundamentally Different?
+<br/>
 
-<center>No.</center>
+- Why is batch processing not thought of as a stream?
+- Are we not accumulating events from *T-1* to *T-n* 
+- Or bucketed by Year-Month-Day-Hour?
+- Can't we process everything as a stream?
 
 ---
 
