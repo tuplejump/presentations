@@ -27,11 +27,10 @@
 <br/>
 
 - VP of Product Engineering, [Tuplejump](http://www.tuplejump.com)
-- Working on event-driven systems for 15 years
+- Cloud Engineer, Big Data, Event-Driven systems
 - Committer: Kafka Connect Cassandra, Spark Cassandra Connector
 - Contributor: Akka, Spring Integration
-- Speaker: Spark Summit, Kafka Summit, Strata, QCon, Scala Days, Scala World, Philly ETE 
-
+- Speaker: Kafka Summit, Spark Summit, Strata, QCon, Scala Days, Scala World, Philly ETE 
 
 ---
 
@@ -80,7 +79,8 @@
 ---
 
 ## Delivering Meaning
-<br/>
+
+### From
 
 - Terabytes of data / day
 - Billions of events per second
@@ -94,17 +94,16 @@
 
 ## The Problem Domain
 <br/>
-Build scalable, adaptable, self-healing, distributed data processing systems that handle
+Build scalable, adaptable, self-healing, distributed data processing systems for
 
-- 24 / 7 system uptime
-  - Rolling restarts for streams
+- 24 / 7 Uptime
+- Scale
 - Complex analytics and learning tasks
 - Aggregation of global data
 - Ops for global, multi-dc clustered data flows
-- Decoupled
-- Scale
+- Decoupled services
+- Idempotent & Acceptable Consistency
 - No data loss
-- Idempotent
 
 ---
 
