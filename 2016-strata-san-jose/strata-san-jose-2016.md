@@ -689,6 +689,115 @@ Visit FiloDB at the Developer Showcase (Expo hall) today!
 
 ---
 
+## Machine Learning with Spark, Cassandra, and FiloDB
+
+--
+
+## Building a static model of NYC Taxi Trips
+
+- Predict time to get to destination based on pickup point, time of day, other vars
+- Need to read all data (full table scan)
+
+--
+
+## Dynamic models are better than static models
+
+- Everything changes!
+- Continuously refine model based on recent streaming data + historical data + existing model
+
+--
+
+```scala
+val ssc = new StreamingContext(sparkConf, Seconds(5) )
+val dataStream = KafkaUtils.createDirectStream[..](..)
+    .map(transformFunc)
+    .map(LabeledPoint.parse)
+    
+dataStream.foreachRDD(_.toDF.write.format("filodb.spark")
+                                .option("dataset", "training").save())
+    
+if (trainNow) {
+   var model = new StreamingLinearRegressionWithSGD()   
+    .setInitialWeights(Vectors.dense(weights))   
+    .trainOn(dataStream.join(historicalEvents))
+}
+     
+model.predictOnValues(dataStream.map(lp => (lp.label, lp.features)))
+     .insertIntoFilo("predictions")
+```
+
+--
+
+![](FiloDB_Cass_Together.002.jpg)
+
+--
+
+## The FiloDB Advantage for ML
+
+- Able to update dynamic models based on massive data flow/updates
+  + Integrate historical and recent events to build models
+- More data -> better models!
+- Can store scored raw data / predictions back in FiloDB
+  + for fast user queries
+
+---
+
+## FiloDB - Roadmap
+
+Your input is appreciated!
+
+* Productionization and automated stress testing
+* Kafka input API / connector (without needing Spark)
+* In-memory caching for significant query speedup
+* True columnar querying and execution, using late materialization and vectorization techniques.  GPU/SIMD.
+* Projections.  Often-repeated queries can be sped up significantly with projections.
+
+---
+
+## Thanks For Attending!
+ 
+- [@helenaedelson](https://twitter.com/helenaedelson)
+- [@evanfchan](https://twitter.com/Evanfchan)
+- [@tuplejump](https://twitter.com/tuplejump) 
+
+---
+
+# EXTRA SLIDES
+
+---
+
+## What are my storage needs?
+
+- Non-persistent / in-memory: concurrent viewers
+- Short term: latest trends
+- Longer term: raw event and aggregate storage
+- ML Models, predictions, scored data
+
+--
+
+## Spark RDDs
+
+- Immutable, cache in memory and/or on disk
+- Spark Streaming: UpdateStateByKey
+- IndexedRDD - can update bits of data
+- Snapshotting for recovery
+
+--
+
+## Using Cassandra for Short Term Storage
+
+|          | 1020s | 1010s | 1000s |
+| -------- | ----- | ----- | ----- |
+| Bus A    | Speed, GPS |   |      |
+| Bus B    |       |        |      |
+| Bus C    |       |        |      |
+
+- Primary key = (Bus UUID, timestamp)
+- Easy queries: location and speed of single bus for a range of time
+- Can also query most recent location + speed of all buses (slower)
+
+---
+
 ## Data Warehousing with <span class="golden">FiloDB</span>
 
 --
@@ -860,115 +969,6 @@ To follow along:  https://github.com/tuplejump/FiloDB/blob/master/doc/FiloDB_Tax
 - SQL to DataFrame caching
 
 For more details, see [this blog post](http://velvia.github.io/Spark-Concurrent-Fast-Queries/).
-
----
-
-## Machine Learning with Spark, Cassandra, and FiloDB
-
---
-
-## Building a static model of NYC Taxi Trips
-
-- Predict time to get to destination based on pickup point, time of day, other vars
-- Need to read all data (full table scan)
-
---
-
-## Dynamic models are better than static models
-
-- Everything changes!
-- Continuously refine model based on recent streaming data + historical data + existing model
-
---
-
-```scala
-val ssc = new StreamingContext(sparkConf, Seconds(5) )
-val dataStream = KafkaUtils.createDirectStream[..](..)
-    .map(transformFunc)
-    .map(LabeledPoint.parse)
-    
-dataStream.foreachRDD(_.toDF.write.format("filodb.spark")
-                                .option("dataset", "training").save())
-    
-if (trainNow) {
-   var model = new StreamingLinearRegressionWithSGD()   
-    .setInitialWeights(Vectors.dense(weights))   
-    .trainOn(dataStream.join(historicalEvents))
-}
-     
-model.predictOnValues(dataStream.map(lp => (lp.label, lp.features)))
-     .insertIntoFilo("predictions")
-```
-
---
-
-![](FiloDB_Cass_Together.002.jpg)
-
---
-
-## The FiloDB Advantage for ML
-
-- Able to update dynamic models based on massive data flow/updates
-  + Integrate historical and recent events to build models
-- More data -> better models!
-- Can store scored raw data / predictions back in FiloDB
-  + for fast user queries
-
----
-
-## FiloDB - Roadmap
-
-Your input is appreciated!
-
-* Productionization and automated stress testing
-* Kafka input API / connector (without needing Spark)
-* In-memory caching for significant query speedup
-* True columnar querying and execution, using late materialization and vectorization techniques.  GPU/SIMD.
-* Projections.  Often-repeated queries can be sped up significantly with projections.
-
----
-
-## Thanks For Attending!
- 
-- [@helenaedelson](https://twitter.com/helenaedelson)
-- [@evanfchan](https://twitter.com/Evanfchan)
-- [@tuplejump](https://twitter.com/tuplejump) 
-
----
-
-# EXTRA SLIDES
-
----
-
-## What are my storage needs?
-
-- Non-persistent / in-memory: concurrent viewers
-- Short term: latest trends
-- Longer term: raw event and aggregate storage
-- ML Models, predictions, scored data
-
---
-
-## Spark RDDs
-
-- Immutable, cache in memory and/or on disk
-- Spark Streaming: UpdateStateByKey
-- IndexedRDD - can update bits of data
-- Snapshotting for recovery
-
---
-
-## Using Cassandra for Short Term Storage
-
-|          | 1020s | 1010s | 1000s |
-| -------- | ----- | ----- | ----- |
-| Bus A    | Speed, GPS |   |      |
-| Bus B    |       |        |      |
-| Bus C    |       |        |      |
-
-- Primary key = (Bus UUID, timestamp)
-- Easy queries: location and speed of single bus for a range of time
-- Can also query most recent location + speed of all buses (slower)
 
 ---
 
