@@ -75,10 +75,7 @@
 - Pitfalls and Simplification
 - Precise and scalable streaming ingestion
 - FiloDB and fast analytics with competitive storage cost
-- Use Cases
-  - Data Warehousing with Spark, Cassandra, and FiloDB
-  - Time series / event data / geospatial examples
-  - Machine learning using Spark MLLib + Cassandra/FiloDB
+- Machine learning with Spark, Cassandra, and FiloDB
 
 ---
 
