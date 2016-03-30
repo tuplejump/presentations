@@ -445,8 +445,8 @@ class KafkaStreamingActor(ssc: StreamingContext) extends MyAggregationActor { 
   val stream = KafkaUtils.createDirectStream(...) .map(RawWeatherData(_))
   
   stream
-    .foreachRDD(_.toDF.write.format("filodb.spark"))
-    .option(rawDataKeyspace, rawDataTable)
+    .foreachRDD(_.toDF.write.format("filodb.spark")
+                 .option("dataset", "rawdata").save())
  
   /* Pre-Aggregate data in the stream for fast querying and aggregation later. */
   
@@ -545,7 +545,7 @@ A distributed, versioned, columnar analytics database.<br>
   + Up to 200x faster scan speeds than with Cassandra 2.x
 - Flexible filtering along two dimensions
   + Much more efficient and flexible partition key filtering
-- Efficient columnar storage, up to 27x more efficient than Cassandra 2.x
+- Efficient columnar storage, up to 40x more efficient than Cassandra 2.x
 
 NOTE: 200x is just based on columnar storage + projection pushdown - no filtering on sort or partition keys, and no caching done yet.
 
@@ -668,7 +668,7 @@ Rich sweet layers of distributed, versioned database goodness
 * Time series
   - idempotent write API, simultaneous write and read workloads
 * In-memory SQL web server
-  - Hundreds of queries per second using in-memory column store
+  - [700 queries per second using in-memory column store](http://velvia.github.io/Spark-Concurrent-Fast-Queries/)
 
 ---
 
@@ -696,6 +696,7 @@ Different use cases:
 
 - Druid is optimized mostly for OLAP cube / slice and dice analysis.  Append only, keeps only aggregates, not a raw event store.
 - FiloDB stores raw data - can be used to build ML models, visualize and analyze raw time series data, do complex event flow analysis - much more flexible
+- FiloDB can update/replace data
 - FiloDB does not require data denormalization - can handle traditional BI star schemas with slowly changing dimension tables
 
 ---
