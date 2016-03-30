@@ -77,15 +77,12 @@
 
 ## Delivering Meaning
 
-### From
+### Derived From
+<br/>
 
-- Terabytes of data / day
-- Billions of events per second
-  - Sub-second, low latency stream processing
-  - Higher latency stream processing
-  - Batch / scheduled processing
 - Many data streams
 - Disparate sources and schemas
+- Originating from many locations
 
 ---
 
@@ -94,9 +91,9 @@
 Build scalable, adaptable, self-healing, distributed data processing systems for
 
 - 24 / 7 Uptime
-- Scale
+- Auto scale out
 - Complex analytics and learning tasks
-- Aggregation of global data
+- Aggregate global data
 - Ops for global, multi-dc clustered data flows
 - Decoupled services
 - Idempotent & Acceptable Consistency
@@ -120,15 +117,18 @@ Build scalable, adaptable, self-healing, distributed data processing systems for
 
 ---
 
-## Self-Healing Systems
-<br/>
-
+## Need Self-Healing Systems
 - Massive event spikes & bursty traffic
 - Fast producers / slow consumers
 - Network partitioning & out of sync systems 
 - DC down 
 - Not DDOS'ing ourselves from fast streams
 - No data loss when auto-scaling down
+
+<br/>
+
+### Monitor Everything
+<center>Everything fails, all the time</center>
 
 ---
 
@@ -146,19 +146,21 @@ Build scalable, adaptable, self-healing, distributed data processing systems for
 ## Only, It's Not A Stream It's A Flood
 <br/>
 
-- Billions of event writes per day
-- Trillions of event reads per day
-- Millions of events per second at peak
+- Trillions of event writes per day
+- Billions of event reads per day
+- Massive events per second at peak
 - Petabytes of total streaming data
 
 ---
 
-## Individual Ingestion Streams Differ 
+## Not All Streams Are Created The Same 
 <br/>
-<center>In daily, hourly, peak volume, frequency, peak spikes.</center>
+<center>Daily, Hourly, Frequency, Event Spikes at Peak, Overall Volume</center>
 <br/>
-
-#### Real Time | Sub-second Latency | Second and higher Latency
+ 
+- Sub-second, low latency stream processing
+- Higher latency stream processing
+- Scheduled or on request batch processing
 
 ---
 
