@@ -414,6 +414,10 @@ streams.start()
 
 ```
 
+&nbsp;<p><center>
+[https://github.com/confluentinc/demos](https://github.com/confluentinc/demos)
+</center>
+
 ---
 
 ## Immutable Raw Data From Kafka Stream
