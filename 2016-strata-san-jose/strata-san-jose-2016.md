@@ -647,7 +647,7 @@ Rich sweet layers of distributed, versioned database goodness
 * Time series
   - idempotent write API, simultaneous write and read workloads
 * In-memory SQL web server
-  - Hundreds of queries per second using in-memory column store
+  - [700 queries per second using in-memory column store](http://velvia.github.io/Spark-Concurrent-Fast-Queries/)
 
 ---
 
