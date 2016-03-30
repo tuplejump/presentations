@@ -675,6 +675,7 @@ Different use cases:
 
 - Druid is optimized mostly for OLAP cube / slice and dice analysis.  Append only, keeps only aggregates, not a raw event store.
 - FiloDB stores raw data - can be used to build ML models, visualize and analyze raw time series data, do complex event flow analysis - much more flexible
+- FiloDB can update/replace data
 - FiloDB does not require data denormalization - can handle traditional BI star schemas with slowly changing dimension tables
 
 ---
