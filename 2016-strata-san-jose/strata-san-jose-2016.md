@@ -58,10 +58,7 @@
 
 ---
 
-<center>
-**Tuplejump Blender** 
-<small>Builds unified datasets for fast querying, streaming and batch sources, ML and Analytics</small>
-</center>
+## Tuplejump Data Blender 
 <center>
 ![](images/tj-blender.png) 
 </center>
@@ -149,26 +146,57 @@ Build scalable, adaptable, self-healing, distributed data processing systems for
 ## Only, It's Not A Stream It's A Flood
 <br/>
 
-- Billions of writes per day
-- Trillions of read per day
+- Billions of event writes per day
+- Trillions of event reads per day
 - Millions of events per second at peak
 - Petabytes of total streaming data
 
 ---
 
-## Bounds of Data Ingestion
+## Individual Ingestion Streams Differ 
 <br/>
-<center>Individual stream patterns differ in daily, hourly, peak volume, frequency, peak spikes.</center>
+<center>In daily, hourly, peak volume, frequency, peak spikes.</center>
 <br/>
 
-#### Real Time | Sub-second | Second and higher
+#### Real Time | Sub-second Latency | Second and higher Latency
 
 ---
 
 ## Real Time
-<center>Just means **Event Driven** or processing events as they arrive.
-        It doesn't automatically equal sub-second latency requirements.
-</center>
+
+- Just means **Event Driven** or processing events as they arrive
+- Doesn't automatically equal sub-second latency requirements
+
+<br/>
+### Event Time
+
+- When an event is created, e.g. on sensor
+- Events should be *uniquely* timestamped on ingestion for tracking, metrics and replay
+
+
+---
+
+### Based on the schema of data in a given stream
+
+Some can aggregate with sliding windows (T1...Tn,Tn+1...) using window length + slide interval:
+```scala
+stream.reduceByKeyAndWindow((a:Int,b:Int) => (a + b), Seconds(30), Seconds(10))
+```
+
+<br/>
+Some must aggregate by buckets 
+
+```
+/Event_Type/YYYY/MM/DD/HH/MM/...
+```
+
+```
+CREATE TABLE timeseries.raw_data_fu (
+   sensor_id text, year int, month int, day int, hour int,...
+   PRIMARY KEY ((sensor_id), year, month, day, hour)
+) WITH CLUSTERING ORDER BY (year DESC, month DESC, day DESC, hour DESC);
+```
+
 
 ---
 
@@ -316,22 +344,15 @@ Everything On The Streaming Platform</center>
 
 ### Kafka Streams
 
-- New Kafka Streams coming in v0.10
+- In master, coming in v0.10
 - Removes the need to run another framework like Storm alongside Kafka
 - Removes the need for separate infrastructures
-
----
-
-## Kafka Streams
-
-A library for building streaming applications, specifically applications that transform input Kafka topics into 
-output Kafka topics, with concise code, distribution and fault tolerance.
-
 - Common stream operations, e.g. join, filter, map, etc.
 - Windowing
 - Proper time modeling, e.g. event time vs. processing time
 - Local state management with persistence and replication
 - Schema and Avro support
+
 
 ---
 
@@ -393,18 +414,16 @@ output Kafka topics, with concise code, distribution and fault tolerance.
 ![](images/reactive-vs-predictive.jpg)
 </center>
 
-<center>Show me the codez</center>
-
 ---
 
 ## Kafka Streams
 
-```scala
+```java
 val builder = new KStreamBuilder()
-val stream: KStream[K,V] = builder.stream(kdes,vdes, "raw.data.topic")
-  .flatMapValues(value -> Arrays.asList(value.toLowerCase.split("")
+val stream: KStream[K,V] = builder.stream(des, des, "raw.data.topic")
+  .flatMapValues(value -> Arrays.asList(value.toLowerCase.split(" ")
   .map((k,v) -> new KeyValue(k,v))
-  .countByKey(...)
+  .countByKey(ser, ser, des, des, "kTable")
   .toStream()
   
 stream.to("results.topic", ...)
@@ -416,32 +435,34 @@ streams.start()
 
 ---
 
-## Immutable Raw Data From Kafka Stream
+## Spark Streaming Kafka
+### Immutable Raw Data From Kafka Stream
 <center>Replaying data streams: for fault tolerance, logic changes..</center>
 
 ```scala
-class KafkaStreamingActor(ssc: StreamingContext, settings: Settings) extends AggregationActor {   
+class KafkaStreamingActor(ssc: StreamingContext) extends MyAggregationActor {   
+  
   val stream = KafkaUtils.createDirectStream(...) .map(RawWeatherData(_))
+  
   stream
     .foreachRDD(_.toDF.write.format("filodb.spark"))
     .option(rawDataKeyspace, rawDataTable)
  
   /* Pre-Aggregate data in the stream for fast querying and aggregation later. */
- 
+  
    stream.map(hour => 
      (hour.wsid, hour.year, hour.month, hour.day, hour.oneHourPrecip)
-  ).saveToCassandra(CassandraKeyspace, CassandraTableDailyPrecip)  
+  ).saveToCassandra(timeseriesKeyspace, dailyPrecipTable)  
 }
 ```
 
 ---
 
-### Reading Data Back From Cassandra
+### Reading Data From Cassandra On Request, Further Aggregation
 #### Compute isolation in Akka Actor
 
 ```scala
-class TemperatureActor(sc: SparkContext, settings: Settings) extends AggregationActor {   
-  import settings._
+class TemperatureActor(sc: SparkContext) extends AggregationActor {   
   import akka.pattern.pipe
   
   def receive: Actor.Receive = {     
@@ -462,10 +483,10 @@ class TemperatureActor(sc: SparkContext, settings: Settings) extends Aggregation
 ## Kafka, Cassandra
 
 ```scala
-val ssc = new StreamingContext(sparkConf, Seconds(5) 
+val ssc = new StreamingContext(sparkConf, Seconds(5) )
 val testData = ssc.cassandraTable[String](keyspace,table)
-  .map(LabeledPoint.parse)
-      
+    .map(LabeledPoint.parse)
+            
 val trainingStream = KafkaUtils.createDirectStream[_,_,_,_](..)
     .map(transformFunc)
     .map(LabeledPoint.parse)
