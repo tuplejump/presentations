@@ -423,8 +423,8 @@ streams.start()
 class KafkaStreamingActor(ssc: StreamingContext, settings: Settings) extends AggregationActor {   
   val stream = KafkaUtils.createDirectStream(...) .map(RawWeatherData(_))
   stream
-    .foreachRDD(_.toDF.write.format("filodb.spark"))
-    .option(rawDataKeyspace, rawDataTable)
+    .foreachRDD(_.toDF.write.format("filodb.spark")
+                 .option("dataset", "rawdata").save())
  
   /* Pre-Aggregate data in the stream for fast querying and aggregation later. */
  
@@ -524,7 +524,7 @@ A distributed, versioned, columnar analytics database.<br>
   + Up to 200x faster scan speeds than with Cassandra 2.x
 - Flexible filtering along two dimensions
   + Much more efficient and flexible partition key filtering
-- Efficient columnar storage, up to 27x more efficient than Cassandra 2.x
+- Efficient columnar storage, up to 40x more efficient than Cassandra 2.x
 
 NOTE: 200x is just based on columnar storage + projection pushdown - no filtering on sort or partition keys, and no caching done yet.
 
