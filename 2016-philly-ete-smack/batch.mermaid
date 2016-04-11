@@ -1,0 +1,7 @@
+graph LR;
+I(Incoming Data);
+I --> H(HDFS Files);
+H --> J1[MR Job 1];
+J1 --> J2[MR Job 2];
+J2 --> J3[MR Job 3];
+J3 --> D(Database);

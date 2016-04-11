@@ -1,0 +1,8 @@
+graph TB;
+C(BI Client / Beeline) --> S(JDBC Hive Thrift Server);
+S --> HC(Spark HiveContext);
+HC --> F(FiloDB Data Source);
+HC --> CSC(Cassandra-Spark Connector);
+F --> Ca(Cassandra);
+CSC --> Ca;
+
