@@ -298,10 +298,10 @@ of data by taking advantage of both batch and stream processing methods.*
 ## Are Batch and Streaming Systems Fundamentally Different?
 <br/>
 
-- Why is batch processing not thought of as a stream?
-- Are we not accumulating events from *T-1* to *T-n* 
+- Both accumulate events from ```*T1...Tn, Tn+1...Tn+x,...*```
 - Or bucketed by Year-Month-Day-Hour?
-- Can't we process everything as a stream?
+- Streaming frameworks have schedulers
+
 
 ---
 
